@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sarrera_bihurketak">
+        <item>Pila</item>
+        <item>Bektore</item>
+        <item>Hitza</item>
+        <item>Zenbaki</item>
+        <item>Hitz-lista</item>
+    </string-array>
+
+    <string-array name="irteera_bihurketak">
+        <item>Kodetu</item>
+        <item>Deskodetu</item>
+        <item>Pila</item>
+        <item>Zenbaki</item>
+        <item>Bektore</item>
+        <item>Hitza</item>
+    </string-array>
+</resources>
