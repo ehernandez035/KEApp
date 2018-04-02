@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
 
@@ -59,6 +59,15 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
+        Button rankingButton = findViewById(R.id.rankingButton);
+        rankingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, RankingActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -99,10 +108,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_manage){
+        if (id == R.id.nav_manage) {
             Intent myIntent = new Intent(this, SettingsActivity.class);
             startActivity(myIntent);
-        } else if(id == R.id.logout){
+        } else if (id == R.id.logout) {
             Intent myIntent = new Intent(this, RegisterActivity.class);
             startActivity(myIntent);
         }
@@ -114,7 +123,7 @@ public class MainActivity extends AppCompatActivity
 
 
     public String getPath(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         int column_index = cursor
                 .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);

@@ -238,4 +238,27 @@
     </string>
     <string name="connection_error">Errorea konexioan</string>
     <string name="error_email_taken">Email-a aurretik erabili da</string>
+    <string name="error_username_taken">Erabiltzailea hartuta dago</string>
+    <string name="username">Erabiltzailea:</string>
+    <string name="error_invalid_credentials">Pasahitza edo erabiltzailea gaizki</string>
+    <string name="rankigTV">Ranking</string>
+    <string name="registerLink"><u>Ez duzu konturik? Hemen klikatu</u></string>
+    <string name="carButton">car</string>
+    <string name="consButton">cons</string>
+    <string name="ifButton">if</string>
+    <string name="whileButton">while</string>
+    <string name="forButton">for</string>
+    <string name="functionButton">function</string>
+    <string name="carValue">car_?()</string>
+    <string name="consValue">cons_?()</string>
+    <string name="ifValue">if then \n end if;</string>
+    <string name="whileValue">car_?()</string>
+    <string name="forValue">for i in 1.. loop \n end loop;</string>
+    <string name="functionValue">def begin \n end def;()</string>
+    <string name="galdetegiak">Galdetegiak</string>
+    <string name="konbertsorea">Konbertsorea</string>
+    <string name="programatu">Programak idatzi</string>
+    <string name="programaMota">Programa mota aukeratu:</string>
+    <string name="hasi">Hasi!</string>
+
 </resources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="475dp"
+    android:orientation="vertical"
+    android:background="@color/gray"
+    android:padding="5dp"
+    android:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/close_popup"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="right"
+        android:background="@drawable/ic_close_black_24dp" />
+
+    <TextView
+        android:id="@+id/programaMotaTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/programaMota"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/background"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="359dp" >
+
+        <RadioButton
+            android:id="@+id/WPradioButton"
+            android:layout_width="352dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/while_radio_button"
+            android:textColor="@color/background"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/MPradioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/makro_radio_button"
+            android:textColor="@color/background"
+            android:textSize="18sp" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/popup_hasiButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/hasi"
+        android:textSize="18sp" />
+
+</LinearLayout>

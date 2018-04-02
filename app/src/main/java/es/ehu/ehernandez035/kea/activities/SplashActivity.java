@@ -46,7 +46,7 @@ private ImageView iv;
 
 
 
-        final Intent i = new Intent(this, RegisterActivity.class);
+        final Intent i = new Intent(this, LoginActivity.class);
         Thread timer = new Thread(new Runnable() {
             @Override
             public void run() {

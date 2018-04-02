@@ -37,13 +37,6 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
@@ -279,12 +272,18 @@ public class RegisterActivity extends AppCompatActivity {
                         b.setIcon(android.R.drawable.ic_dialog_alert);
                         b.show();
                         break;
-                    case 5:
+                    case 6:
                         Snackbar.make(email, R.string.connection_error, Snackbar.LENGTH_SHORT).show();
-                    case 4:
+                        break;
+                    case 5:
                         email.setError(getString(R.string.error_email_taken));
                         email.requestFocus();
                         break;
+                    case 4:
+                        username.setError(getString(R.string.error_username_taken));
+                        username.requestFocus();
+                        break;
+
 
                 }
             }

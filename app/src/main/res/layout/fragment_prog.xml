@@ -1,112 +1,166 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/progFragment"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="es.ehu.ehernandez035.kea.fragments.ProgFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/programaTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/program_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/exekButton"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/exek_title"
-        app:layout_constraintBottom_toTopOf="@+id/emaitzaTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/emaitzaTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/emaitza_title"
-        app:layout_constraintBottom_toTopOf="@+id/emaitzaView"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/emaitzaView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/programText"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/progFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="8dp"
-        android:layout_toEndOf="@+id/lineNumberView"
-        android:layout_toRightOf="@+id/lineNumberView"
-        android:ems="10"
-        android:gravity="left|top"
-        android:inputType="textMultiLine"
-        android:padding="10dp"
-        android:text="def main begin\n end def;"
-        app:layout_constraintBottom_toBottomOf="@+id/lineNumberView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/lineNumberView"
-        app:layout_constraintTop_toTopOf="@+id/lineNumberView" />
-
-    <TextView
-        android:id="@+id/lineNumberView"
-        android:layout_width="40dp"
-        android:layout_height="0dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="#eeeeee"
-        android:gravity="center_horizontal"
-        android:padding="10dp"
-        android:text=""
-        android:textSize="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/exekButton"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/keyboardScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/programaTitle" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context="es.ehu.ehernandez035.kea.fragments.ProgFragment">
 
-    <RelativeLayout
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content">
+        <!-- TODO: Update blank fragment layout -->
 
-    <android.inputmethodservice.KeyboardView
-        android:id="@+id/keyboardview"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:visibility="gone" />
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/programaTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/program_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/exekButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/exek_title"
+            app:layout_constraintBottom_toTopOf="@+id/emaitzaTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/emaitzaTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/emaitza_title"
+            app:layout_constraintBottom_toTopOf="@+id/emaitzaView"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/emaitzaView"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/programText"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:ems="10"
+            android:gravity="left|top"
+            android:inputType="textMultiLine"
+            android:padding="10dp"
+            android:text="def main begin\n end def;"
+            app:layout_constraintBottom_toBottomOf="@+id/lineNumberView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lineNumberView"
+            app:layout_constraintTop_toTopOf="@+id/lineNumberView" />
+
+        <TextView
+            android:id="@+id/lineNumberView"
+            android:layout_width="36dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:background="#eeeeee"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text=""
+            android:textSize="18dp"
+            app:layout_constraintBottom_toTopOf="@+id/exekButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/programaTitle" />
+
+
+        <android.inputmethodservice.KeyboardView
+            android:id="@+id/keyboardview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:visibility="gone" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/keyboardScrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_marginBottom="8dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:id="@+id/directchild"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/carButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/carButton"
+                app:layout_constraintBaseline_toBaselineOf="@+id/consButton"
+                app:layout_constraintEnd_toStartOf="@+id/consButton"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/consButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/consButton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/carButton"
+                app:layout_constraintTop_toBottomOf="@+id/progFragment" />
+
+            <Button
+                android:id="@+id/ifButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/ifButton" />
+
+            <Button
+                android:id="@+id/whileButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/whileButton" />
+
+            <Button
+                android:id="@+id/forButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/forButton" />
+
+            <Button
+                android:id="@+id/functionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/functionButton" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
 
 
 </android.support.constraint.ConstraintLayout>

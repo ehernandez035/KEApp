@@ -16,16 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import es.ehu.ehernandez035.kea.MakroRun;
-import es.ehu.ehernandez035.kea.adapters.ErrorListAdapter;
-import es.ehu.ehernandez035.kea.adapters.ParamListAdapter;
 import es.ehu.ehernandez035.kea.R;
 import es.ehu.ehernandez035.kea.activities.ProgActivity;
+import es.ehu.ehernandez035.kea.adapters.ErrorListAdapter;
 import es.ehu.ikasle.ehernandez035.makroprograma.SZA.Errorea;
 
 
@@ -36,10 +36,12 @@ import es.ehu.ikasle.ehernandez035.makroprograma.SZA.Errorea;
  * Use the {@link ProgFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProgFragment extends Fragment {
+public class ProgFragment extends Fragment implements View.OnClickListener {
 
     private TextView lineNumbers;
     private EditText programText;
+    private HorizontalScrollView horizontalScrollView;
+
 
     public ProgFragment() {
         // Required empty public constructor
@@ -61,18 +63,31 @@ public class ProgFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
+    // Gets the current position of the cursor
+    public int getEditSelection() {
+        return programText.getSelectionStart();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_prog, container, false);
+        View layout = inflater.inflate(R.layout.fragment_prog, container, false);
+
+        Button carButton = layout.findViewById(R.id.carButton);
+        Button consButton = layout.findViewById(R.id.consButton);
+        Button ifButton = layout.findViewById(R.id.ifButton);
+        Button whileButton = layout.findViewById(R.id.whileButton);
+        Button forButton = layout.findViewById(R.id.forButton);
+        Button functionButton = layout.findViewById(R.id.functionButton);
+        carButton.setOnClickListener(this);
+        consButton.setOnClickListener(this);
+        ifButton.setOnClickListener(this);
+        whileButton.setOnClickListener(this);
+        forButton.setOnClickListener(this);
+        functionButton.setOnClickListener(this);
+
+        return layout;
     }
 
     @Override
@@ -81,6 +96,8 @@ public class ProgFragment extends Fragment {
 
         lineNumbers = (TextView) getActivity().findViewById(R.id.lineNumberView);
         programText = (EditText) getActivity().findViewById(R.id.programText);
+        horizontalScrollView = (HorizontalScrollView) getActivity().findViewById(R.id.keyboardScrollView);
+        horizontalScrollView.setVisibility(View.GONE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             programText.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -124,10 +141,21 @@ public class ProgFragment extends Fragment {
             public void afterTextChanged(Editable editable) {
 
             }
+
         });
 
+        programText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                horizontalScrollView.setVisibility(View.VISIBLE);
+            }
+        });
+
+
         final Button exekuteBtn = (Button) getActivity().findViewById(R.id.exekButton);
-        exekuteBtn.setOnClickListener(new View.OnClickListener() {
+        exekuteBtn.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View view) {
                 EditText programaText = getActivity().findViewById(R.id.programText);
@@ -198,6 +226,46 @@ public class ProgFragment extends Fragment {
 
             }
         });
+
     }
 
+    @Override
+    public void onClick(View v) {
+        String value = "";
+        int cursorOffset = 0;
+
+
+        switch (v.getId()) {
+            case R.id.carButton:
+                value = "car_?()";
+                cursorOffset = 4;
+                break;
+            case R.id.consButton:
+                value = "cons_?()";
+                cursorOffset = 5;
+                break;
+            case R.id.ifButton:
+                value = "if  then\n\nend if;";
+                cursorOffset = 3;
+                break;
+            case R.id.whileButton:
+                value = "while  loop\n\nend loop;";
+                cursorOffset = 5;
+                break;
+            case R.id.forButton:
+                value = "for i in 1.. loop\n\nend loop;";
+                cursorOffset = 12;
+                break;
+            case R.id.functionButton:
+                value = "def  begin\n\nend def;";
+                cursorOffset = 4;
+                break;
+            default:
+                break;
+        }
+        int cursorPosition = programText.getSelectionStart();
+        programText.getEditableText().insert(cursorPosition, value);
+        programText.setSelection(cursorPosition + cursorOffset);
+
+    }
 }

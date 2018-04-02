@@ -1,43 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/user_item"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/rakingPosTV"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="ranking pos"
-        android:textAlignment="viewStart"
+        android:id="@+id/rankingPosTV"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:padding="8dp"
+        android:gravity="end" />
 
     <TextView
         android:id="@+id/pointTV"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="points"
-        app:layout_constraintEnd_toStartOf="@+id/usernameTV"
-        app:layout_constraintStart_toEndOf="@+id/rakingPosTV"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="18sp"
+        android:padding="8dp"
+        android:textAlignment="center"
+        />
 
     <TextView
         android:id="@+id/usernameTV"
-        android:layout_width="127dp"
-        android:layout_height="18dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:text="username"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="18sp"
+        android:padding="8dp"/>
 
-</android.support.constraint.ConstraintLayout>
+</TableRow>
