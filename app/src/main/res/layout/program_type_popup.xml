@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup_layout"
     android:layout_width="350dp"
     android:layout_height="475dp"
+    android:layout_gravity="center"
     android:orientation="vertical"
-    android:background="@color/gray"
-    android:padding="5dp"
-    android:layout_gravity="center">
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/close_popup"
@@ -22,29 +21,29 @@
         android:text="@string/programaMota"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/background"/>
+        android:layout_marginBottom="16dp"/>
 
     <RadioGroup
+        android:id="@+id/popup_radioGroup"
         android:layout_width="match_parent"
-        android:layout_height="359dp" >
+        android:layout_height="wrap_content">
 
         <RadioButton
             android:id="@+id/WPradioButton"
-            android:layout_width="352dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:checked="true"
             android:text="@string/while_radio_button"
-            android:textColor="@color/background"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_margin="8dp"/>
 
         <RadioButton
             android:id="@+id/MPradioButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/makro_radio_button"
-            android:textColor="@color/background"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_margin="8dp"/>
     </RadioGroup>
 
     <Button
@@ -53,6 +52,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/hasi"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        />
 
 </LinearLayout>

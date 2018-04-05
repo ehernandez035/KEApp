@@ -48,6 +48,9 @@ public class RankingActivity extends AppCompatActivity {
 
         myranking = findViewById(R.id.myrankingTV);
         rankingContainer = findViewById(R.id.rankingContainer);
+
+        MyRankingTask myRankingTask = new MyRankingTask();
+        myRankingTask.execute((Void) null);
     }
 
     /**
@@ -111,7 +114,7 @@ public class RankingActivity extends AppCompatActivity {
                     JSONObject jObject = new JSONObject(result);
                     int status = jObject.getInt("status");
                     if (status == 0) {
-
+                        //TODO: connection error
                     } else {
                         JSONArray data = jObject.getJSONArray("data");
                         for (int i = 0; i < data.length(); i++) {

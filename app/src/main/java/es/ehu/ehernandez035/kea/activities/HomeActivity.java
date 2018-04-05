@@ -1,16 +1,16 @@
 package es.ehu.ehernandez035.kea.activities;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.support.design.widget.NavigationView;
+import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toolbar;
+import android.widget.RadioGroup;
 
 import es.ehu.ehernandez035.kea.R;
 
@@ -42,20 +42,52 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         LinearLayout galdetegiakLayout = findViewById(R.id.home_galdetegiakLayout);
-        konbertsoreaLayout.setOnClickListener(new View.OnClickListener() {
+        galdetegiakLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(HomeActivity.this, GaldetegiZerrendaActivity.class);
                 startActivity(intent);
             }
         });
 
-        LinearLayout progLayout = findViewById(R.id.home_programLayout);
-        konbertsoreaLayout.setOnClickListener(new View.OnClickListener() {
+        final LinearLayout progLayout = findViewById(R.id.home_programLayout);
+
+        progLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, ProgActivity.class);
-                startActivity(intent);
+                // TODO Popup
+                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(HomeActivity.this);
+                View dialogView = getLayoutInflater().inflate(R.layout.program_type_popup, null);
+                mBuilder.setView(dialogView);
+                final AlertDialog alertDialog = mBuilder.create();
+                final RadioGroup radioGroup = dialogView.findViewById(R.id.popup_radioGroup);
+                Button hasButton = dialogView.findViewById(R.id.popup_hasiButton);
+
+                hasButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(HomeActivity.this, ProgActivity.class);
+                        switch (radioGroup.getCheckedRadioButtonId()) {
+                            case R.id.WPradioButton:
+                                // TODO Send parameters in the intent
+                                break;
+                            case R.id.MPradioButton:
+                                // TODO Send parameters in the intent
+                                break;
+                        }
+                        startActivity(intent);
+                    }
+                });
+
+                ImageView closeButton = dialogView.findViewById(R.id.close_popup);
+                closeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog.show();
+
             }
         });
     }

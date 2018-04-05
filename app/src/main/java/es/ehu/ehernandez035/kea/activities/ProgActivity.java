@@ -1,5 +1,6 @@
 package es.ehu.ehernandez035.kea.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +51,12 @@ public class ProgActivity extends AppCompatActivity implements ParamFragment.Par
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prog);
 
-        Bundle extras = getIntent().getExtras();
+        /*Bundle extras = getIntent().getExtras();
         if (extras != null) {
             makro = extras.getBoolean("makro");
         } else {
             makro = false;
-        }
+        }*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -62,6 +71,8 @@ public class ProgActivity extends AppCompatActivity implements ParamFragment.Par
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
