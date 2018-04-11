@@ -1,5 +1,6 @@
 package es.ehu.ehernandez035.kea.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,9 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import es.ehu.ehernandez035.kea.R;
+import es.ehu.ehernandez035.kea.SharedPrefManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,31 +32,17 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        final RadioGroup group = findViewById(R.id.program_type_group);
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        Button execute = findViewById(R.id.executeButton);
-        execute.setOnClickListener(new View.OnClickListener() {
+        LinearLayout rankingLayout = findViewById(R.id.home_rankingLayout);
+        rankingLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ProgActivity.class);
-                intent.putExtra("makro", group.getCheckedRadioButtonId() == R.id.makro_radio_button);
+                Intent intent = new Intent(MainActivity.this, RankingActivity.class);
                 startActivity(intent);
             }
         });
 
-        Button konbertsorea = findViewById(R.id.konbertsorea_ireki_button);
-        konbertsorea.setOnClickListener(new View.OnClickListener() {
+        LinearLayout konbertsoreaLayout = findViewById(R.id.home_konbertsoreaLayout);
+        konbertsoreaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, CalculatorActivity.class);
@@ -60,12 +50,53 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        Button rankingButton = findViewById(R.id.rankingButton);
-        rankingButton.setOnClickListener(new View.OnClickListener() {
+        LinearLayout galdetegiakLayout = findViewById(R.id.home_galdetegiakLayout);
+        galdetegiakLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, RankingActivity.class);
+                Intent intent = new Intent(MainActivity.this, GaldetegiZerrendaActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        final LinearLayout progLayout = findViewById(R.id.home_programLayout);
+
+        progLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO Popup
+                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+                View dialogView = getLayoutInflater().inflate(R.layout.program_type_popup, null);
+                mBuilder.setView(dialogView);
+                final AlertDialog alertDialog = mBuilder.create();
+                final RadioGroup radioGroup = dialogView.findViewById(R.id.popup_radioGroup);
+                Button hasButton = dialogView.findViewById(R.id.popup_hasiButton);
+
+                hasButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(MainActivity.this, ProgActivity.class);
+                        switch (radioGroup.getCheckedRadioButtonId()) {
+                            case R.id.WPradioButton:
+                                // TODO Send parameters in the intent
+                                break;
+                            case R.id.MPradioButton:
+                                // TODO Send parameters in the intent
+                                break;
+                        }
+                        startActivity(intent);
+                    }
+                });
+
+                ImageView closeButton = dialogView.findViewById(R.id.close_popup);
+                closeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog.show();
+
             }
         });
     }
@@ -96,6 +127,9 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
+            SharedPrefManager.getInstance(this).logout();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
             return true;
         }
 

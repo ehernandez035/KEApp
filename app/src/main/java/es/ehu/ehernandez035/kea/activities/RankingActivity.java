@@ -154,6 +154,9 @@ public class RankingActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
             String cookie = SharedPrefManager.getInstance(RankingActivity.this).getCookie();
+            Log.d("GAL", cookie);
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .build();
             okhttp3.Request request = new okhttp3.Request.Builder()
                     .url("http://elenah.duckdns.org/myranking.php")
                     .header("Cookie", "PHPSESSID=" + cookie)

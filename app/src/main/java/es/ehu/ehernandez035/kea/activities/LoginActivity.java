@@ -4,10 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 
 import es.ehu.ehernandez035.kea.R;
 import es.ehu.ehernandez035.kea.SharedPrefManager;
-import es.ehu.ikasle.ehernandez035.Main;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -87,8 +86,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            startActivity(intent);
+            CheckLoggedInTask task = new CheckLoggedInTask();
+            task.execute();
         }
     }
 
@@ -229,7 +228,7 @@ public class LoginActivity extends AppCompatActivity {
             mAuthTask = null;
             showProgress(false);
             int status = 0;
-            if(response == null){
+            if (response == null) {
                 AlertDialog.Builder b = new AlertDialog.Builder(LoginActivity.this);
                 b.setMessage(R.string.connection_error);
                 b.setIcon(android.R.drawable.ic_dialog_alert);
@@ -248,12 +247,12 @@ public class LoginActivity extends AppCompatActivity {
                 String cookie = response.headers().get("Set-Cookie");
                 String[] parts = cookie.split(";")[0].split("=");
                 Log.d("GAL", "Cookie: " + parts[1]);
-                if (!parts[0].equals("PHPSESSID")){
+                if (!parts[0].equals("PHPSESSID")) {
                     AlertDialog.Builder b = new AlertDialog.Builder(LoginActivity.this);
                     b.setMessage(R.string.connection_error);
                     b.setIcon(android.R.drawable.ic_dialog_alert);
                     b.show();
-                }else {
+                } else {
                     SharedPrefManager.getInstance(LoginActivity.this).userLogin(mUsername, parts[1]);
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
@@ -286,5 +285,47 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    public class CheckLoggedInTask extends AsyncTask<Void, Void, String> {
+
+        private final OkHttpClient client;
+
+        CheckLoggedInTask() {
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.followRedirects(false);
+            client = builder.build();
+        }
+
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String cookie = SharedPrefManager.getInstance(LoginActivity.this).getCookie();
+            okhttp3.Request request = new okhttp3.Request.Builder()
+                    .url("http://elenah.duckdns.org/login.php")
+                    .header("Cookie", "PHPSESSID=" + cookie)
+                    .build();
+            try {
+                okhttp3.Response response = client.newCall(request).execute();
+                return response.body().string();
+            } catch (Exception e) {
+                Log.e("KEA", "Error logging in", e);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final String response) {
+            mAuthTask = null;
+            showProgress(false);
+
+            if ("0".equals(response)) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+            } else if ("3".equals(response)) {
+                Snackbar.make(mLoginFormView, R.string.session_expired, Snackbar.LENGTH_LONG).show();
+            } else {
+                Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
+            }
+        }
+    }
 }
 

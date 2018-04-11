@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -130,6 +131,15 @@ public class CalculatorActivity extends AppCompatActivity {
                 IrteeraMotak irteeraMota = (IrteeraMotak) irteeraSpinner.getSelectedItem();
 
                 String sarrera = sarreraText.getText().toString().replaceAll("\\s", "");
+                String sarreraGarbia = sarrera.replaceAll("[,<\\]()0-9]", "");
+                for (char c : sarreraGarbia.toCharArray()) {
+                    if (!alfLista.contains(c)) {
+                        sarreraText.setError(getString(R.string.error_out_of_alphabet));
+                        Log.d("GAL2", c + "");
+                        return;
+                    }
+                }
+                sarreraText.setError(null);
 
                 String hitzModuan = "";
                 switch (sarreraMota) {

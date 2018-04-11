@@ -168,5 +168,7 @@
     <string name="title_activity_galdetegi_zerrenda">GaldetegiZerrendaActivity</string>
     <string name="galdetegiZerrenda">Galdetegi zerrenda</string>
     <string name="galdetegi_izenburua">%1$d. Galdetegia</string>
+    <string name="session_expired">Saioa iraungi da. Sartu berriro.</string>
+    <string name="error_out_of_alphabet">Sarrerak alfabetoaren kanpoko karaktereak ditu</string>
 
 </resources>

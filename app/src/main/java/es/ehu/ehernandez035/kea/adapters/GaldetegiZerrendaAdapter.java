@@ -2,6 +2,7 @@ package es.ehu.ehernandez035.kea.adapters;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +40,10 @@ public class GaldetegiZerrendaAdapter extends RecyclerView.Adapter<GaldetegiZerr
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("GAL", "Click");
                 Intent intent = new Intent(galdetegiZerrendaActivity, GalderaActivity.class);
-                descriptions.get(position).getQuizzid();
                 intent.putExtra("quizzid", descriptions.get(position).getQuizzid());
+                galdetegiZerrendaActivity.startActivity(intent);
             }
         });
     }
@@ -57,14 +59,12 @@ public class GaldetegiZerrendaAdapter extends RecyclerView.Adapter<GaldetegiZerr
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        final View mView;
         final TextView tittle;
         final TextView description;
         final TextView correctAnswers;
 
         ViewHolder(View view) {
             super(view);
-            mView = view;
             tittle = view.findViewById(R.id.galdetegia_tittle);
             description = view.findViewById(R.id.galdeteguia_description);
             correctAnswers = view.findViewById(R.id.galdetegia_correctAnswer);

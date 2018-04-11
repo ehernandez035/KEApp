@@ -3,28 +3,31 @@ package es.ehu.ehernandez035.kea;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Galdera implements Parcelable{
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Galdera implements Parcelable {
     private final String galdera;
-    private final String op1;
-    private final String op2;
-    private final String op3;
-    private final String op4;
+    private final String auk0;
+    private final String auk1;
+    private final String auk2;
+    private final String auk3;
 
     protected Galdera(Parcel in) {
         galdera = in.readString();
-        op1 = in.readString();
-        op2 = in.readString();
-        op3 = in.readString();
-        op4 = in.readString();
+        auk0 = in.readString();
+        auk1 = in.readString();
+        auk2 = in.readString();
+        auk3 = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(galdera);
-        dest.writeString(op1);
-        dest.writeString(op2);
-        dest.writeString(op3);
-        dest.writeString(op4);
+        dest.writeString(auk0);
+        dest.writeString(auk1);
+        dest.writeString(auk2);
+        dest.writeString(auk3);
     }
 
     @Override
@@ -48,27 +51,36 @@ public class Galdera implements Parcelable{
         return galdera;
     }
 
-    public String getOp1() {
-        return op1;
+    public String getAuk0() {
+        return auk0;
     }
 
-    public String getOp2() {
-        return op2;
+    public String getAuk1() {
+        return auk1;
     }
 
-    public String getOp3() {
-        return op3;
+    public String getAuk2() {
+        return auk2;
     }
 
-    public String getOp4() {
-        return op4;
+    public String getAuk3() {
+        return auk3;
     }
 
-    public Galdera (String galdera, String op1, String op2, String op3, String op4){
-        this.galdera=galdera;
-        this.op1=op1;
-        this.op2=op2;
-        this.op3 = op3;
-        this.op4=op4;
+    public Galdera(String galdera, String auk0, String auk1, String auk2, String auk3) {
+        this.galdera = galdera;
+
+        ArrayList<String> aukerak = new ArrayList<>(4);
+        aukerak.add(auk0);
+        aukerak.add(auk1);
+        aukerak.add(auk2);
+        aukerak.add(auk3);
+
+        Collections.shuffle(aukerak);
+
+        this.auk0 = aukerak.get(0);
+        this.auk1 = aukerak.get(1);
+        this.auk2 = aukerak.get(2);
+        this.auk3 = aukerak.get(3);
     }
 }
