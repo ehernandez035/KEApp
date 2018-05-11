@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
+    android:layout_height="wrap_content"
     android:background="@color/background"
-    android:gravity="bottom"
-    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="64dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <RelativeLayout
@@ -18,20 +18,20 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/profileImage"
-            android:layout_width="83dp"
-            android:layout_height="77dp"
+            android:id="@+id/profileImage_nav"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:background="@drawable/level_ring"
             android:paddingTop="@dimen/nav_header_vertical_spacing" />
 
         <TextView
-            android:id="@+id/levelTV"
+            android:id="@+id/levelTV_nav"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/profileImage"
-            android:layout_alignLeft="@+id/profileImage"
-            android:layout_alignRight="@+id/profileImage"
-            android:layout_alignTop="@+id/profileImage"
+            android:layout_alignBottom="@+id/profileImage_nav"
+            android:layout_alignLeft="@+id/profileImage_nav"
+            android:layout_alignRight="@+id/profileImage_nav"
+            android:layout_alignTop="@+id/profileImage_nav"
             android:gravity="center"
             android:text="0"
             android:textColor="@color/blue"
@@ -39,22 +39,31 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/username"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Username"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/gray"
-        android:textSize="14sp" />
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp">
 
-    <TextView
-        android:id="@+id/total_points"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="total points"
-        android:textColor="@color/gray"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/username_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:text="@string/username"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/gray"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/totalPoints_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/total_points"
+            android:textColor="@color/gray"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

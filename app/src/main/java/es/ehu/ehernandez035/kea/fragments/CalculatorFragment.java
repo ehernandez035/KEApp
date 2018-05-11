@@ -1,11 +1,13 @@
-package es.ehu.ehernandez035.kea.activities;
+package es.ehu.ehernandez035.kea.fragments;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,15 +15,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import es.ehu.ehernandez035.kea.R;
 import es.ehu.ikasle.ehernandez035.makroprograma.Utils;
 
-public class CalculatorActivity extends AppCompatActivity {
+public class CalculatorFragment extends Fragment {
 
     static Context context;
 
@@ -64,19 +66,25 @@ public class CalculatorActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        CalculatorActivity.context = this.getApplicationContext();
-        setContentView(R.layout.activity_calculator);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_calculator, container, false);
+    }
 
-        final Spinner sarreraSpinner = findViewById(R.id.sarrera_spinner);
-        final EditText alfabetoa = findViewById(R.id.alfabetoaET);
-        final Button bihurketaButton = findViewById(R.id.bihurketaButton);
-        final Spinner irteeraSpinner = findViewById(R.id.irteera_spinner);
-        final EditText sarreraText = findViewById(R.id.sarreraBalioakET);
-        final TextView irteeraText = findViewById(R.id.emaitzaBalioaET);
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        final ArrayAdapter<SarreraMotak> sarreraAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, SarreraMotak.values());
+        CalculatorFragment.context = getActivity().getApplicationContext();
+        final Spinner sarreraSpinner = getActivity().findViewById(R.id.sarrera_spinner);
+        final EditText alfabetoa = getActivity().findViewById(R.id.alfabetoaET);
+        final Button bihurketaButton = getActivity().findViewById(R.id.bihurketaButton);
+        final Spinner irteeraSpinner = getActivity().findViewById(R.id.irteera_spinner);
+        final EditText sarreraText = getActivity().findViewById(R.id.sarreraBalioakET);
+        final TextView irteeraText = getActivity().findViewById(R.id.emaitzaBalioaET);
+
+        final ArrayAdapter<SarreraMotak> sarreraAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, SarreraMotak.values());
         sarreraAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sarreraSpinner.setAdapter(sarreraAdapter);
 
@@ -99,7 +107,7 @@ public class CalculatorActivity extends AppCompatActivity {
                         irteeraMotak = new IrteeraMotak[]{IrteeraMotak.Hitza, IrteeraMotak.Pila, IrteeraMotak.Bektore};
                         break;
                 }
-                irteeraSpinner.setAdapter(new ArrayAdapter<>(CalculatorActivity.this, android.R.layout.simple_spinner_item, irteeraMotak));
+                irteeraSpinner.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, irteeraMotak));
 
 
                 bihurketaButton.setEnabled(true);
@@ -114,7 +122,7 @@ public class CalculatorActivity extends AppCompatActivity {
         });
 
 
-        irteeraSpinner.setAdapter(new ArrayAdapter<>(CalculatorActivity.this, android.R.layout.simple_spinner_item, new IrteeraMotak[]{}));
+        irteeraSpinner.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, new IrteeraMotak[]{}));
 
 
         bihurketaButton.setOnClickListener(new View.OnClickListener() {
@@ -164,9 +172,9 @@ public class CalculatorActivity extends AppCompatActivity {
                     case Pila:
                         StringBuilder sbpila = new StringBuilder("< ");
                         ArrayList<String> hitzak = Utils.hitzetikPilera(alfLista, hitzModuan);
-                        for (int i = 0; i<hitzak.size(); i++) {
+                        for (int i = 0; i < hitzak.size(); i++) {
                             sbpila.append(hitzak.get(i));
-                            if (i != hitzak.size()-1) {
+                            if (i != hitzak.size() - 1) {
                                 sbpila.append(", ");
                             }
                         }
@@ -176,9 +184,9 @@ public class CalculatorActivity extends AppCompatActivity {
                     case Bektore:
                         StringBuilder sbbek = new StringBuilder("( ");
                         ArrayList<String> hitzakB = Utils.hitzetikBektorera(alfLista, hitzModuan);
-                        for (int i = 0; i<hitzakB.size(); i++) {
+                        for (int i = 0; i < hitzakB.size(); i++) {
                             sbbek.append(hitzakB.get(i));
-                            if (i != hitzakB.size()-1) {
+                            if (i != hitzakB.size() - 1) {
                                 sbbek.append(", ");
                             }
                         }
@@ -186,8 +194,8 @@ public class CalculatorActivity extends AppCompatActivity {
                         irteeraText.setText(sbbek.toString());
                         break;
                     case Zenbaki:
-                        int zenb = Utils.hitzakZenbakira(alfLista, hitzModuan);
-                        irteeraText.setText(Integer.toString(zenb));
+                        BigInteger zenb = Utils.hitzakZenbakira(alfLista, hitzModuan);
+                        irteeraText.setText(zenb.toString());
                         break;
                 }
 
@@ -195,6 +203,7 @@ public class CalculatorActivity extends AppCompatActivity {
         });
 
 
-
     }
+
+
 }

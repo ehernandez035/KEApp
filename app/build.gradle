@@ -41,4 +41,5 @@ dependencies {
     implementation 'org.antlr:antlr4:4.7'
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'es.ehu.ikasle.ehernandez035:WhileInterpreter:0.1.0'
+    implementation 'com.koushikdutta.ion:ion:2.2.1'
 }

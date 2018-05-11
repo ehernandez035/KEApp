@@ -17,11 +17,11 @@ import es.ehu.ehernandez035.kea.activities.GaldetegiZerrendaActivity;
 
 public class GaldetegiZerrendaAdapter extends RecyclerView.Adapter<GaldetegiZerrendaAdapter.ViewHolder> {
 
-    private List<Quizz> descriptions;
+    private List<Quizz> quizzes;
     private GaldetegiZerrendaActivity galdetegiZerrendaActivity;
 
     public GaldetegiZerrendaAdapter(List<Quizz> items,  GaldetegiZerrendaActivity gza) {
-        descriptions = items;
+        quizzes = items;
         galdetegiZerrendaActivity = gza;
     }
 
@@ -35,14 +35,21 @@ public class GaldetegiZerrendaAdapter extends RecyclerView.Adapter<GaldetegiZerr
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.tittle.setText(galdetegiZerrendaActivity.getString(R.string.galdetegi_izenburua, position+1));
-        holder.description.setText(descriptions.get(position).getDescription());
+        final Quizz quizz = quizzes.get(position);
+        holder.description.setText(quizz.getDescription());
+        if (quizz.getAmount() == 0) {
+            holder.correctAnswers.setText("0 %");
+        } else {
+            holder.correctAnswers.setText(Integer.toString((int) (quizz.getCorrectAnswers() / (float)quizz.getAmount() * 100)) + " %");
+        }
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("GAL", "Click");
                 Intent intent = new Intent(galdetegiZerrendaActivity, GalderaActivity.class);
-                intent.putExtra("quizzid", descriptions.get(position).getQuizzid());
+                intent.putExtra("quizzid", quizz.getQuizzid());
                 galdetegiZerrendaActivity.startActivity(intent);
             }
         });
@@ -50,11 +57,11 @@ public class GaldetegiZerrendaAdapter extends RecyclerView.Adapter<GaldetegiZerr
 
     @Override
     public int getItemCount() {
-        return descriptions.size();
+        return quizzes.size();
     }
 
     public void setData(List<Quizz> data) {
-        this.descriptions = data;
+        this.quizzes = data;
         this.notifyDataSetChanged();
     }
 

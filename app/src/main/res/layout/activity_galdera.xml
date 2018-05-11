@@ -52,13 +52,12 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_weight="1"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/sendGalderaButton"
         app:layout_constraintEnd_toStartOf="@+id/galdera_hurIV"
-        app:layout_constraintStart_toEndOf="@+id/galdera_aurreIV"
-        app:layout_constraintTop_toBottomOf="@+id/galderaTV">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/galdera_aurreIV">
 
         <RadioButton
             android:id="@+id/galdera_op1"
@@ -96,7 +95,7 @@
         <RadioButton
             android:id="@+id/galdera_op3"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -137,12 +136,12 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/circleorange"
+        android:contentDescription="Next"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/galderaTV"
-        app:srcCompat="@drawable/ic_arrow_forward_black_24dp"
-        android:contentDescription="Next" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView_galdera"
+        app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
 
     <ImageView
         android:id="@+id/galdera_aurreIV"
@@ -154,13 +153,13 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/circleorange"
+        android:contentDescription="Previous"
         android:padding="10dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/galderaTV"
-        app:srcCompat="@drawable/ic_arrow_back_black_24dp"
-        android:contentDescription="Previous" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView_galdera"
+        app:srcCompat="@drawable/ic_arrow_back_black_24dp"/>
 
     <Button
         android:id="@+id/sendGalderaButton"
@@ -171,12 +170,29 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="@string/registerButton"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView_galdera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/galderaRadioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/galderaRadioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/galderaTV"
+        app:srcCompat="@drawable/empty" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,39 +1,95 @@
 package es.ehu.ehernandez035.kea.activities;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import es.ehu.ehernandez035.kea.R;
-import es.ehu.ehernandez035.kea.SharedPrefManager;
+import es.ehu.ehernandez035.kea.RequestCallback;
+import es.ehu.ehernandez035.kea.ServerRequest;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private DrawerLayout drawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle extras = getIntent().getExtras();
+        // TODO Get user info
+
+
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        this.drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        final TextView username = header.findViewById(R.id.username_nav);
+        final TextView points = header.findViewById(R.id.totalPoints_nav);
+        final TextView level = header.findViewById(R.id.levelTV_nav);
         LinearLayout rankingLayout = findViewById(R.id.home_rankingLayout);
-        rankingLayout.setOnClickListener(new View.OnClickListener() {
+        LinearLayout konbertsoreaLayout = findViewById(R.id.home_konbertsoreaLayout);
+        LinearLayout galdetegiakLayout = findViewById(R.id.home_galdetegiakLayout);
+        final LinearLayout progLayout = findViewById(R.id.home_programLayout);
+
+
+        new ServerRequest(this, "http://elenah.duckdns.org/userInfo.php", new RequestCallback() {
+            @Override
+            public void onSuccess(Response response) throws IOException {
+                String result = response.body().string();
+                if (result != null) {
+                    try {
+                        JSONObject jObject = new JSONObject(result);
+                        int status = jObject.getInt("status");
+                        if (status == 0) {
+                            Snackbar.make(username, R.string.connection_error, Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            level.setText(Integer.toString(jObject.getInt("level")));
+                            points.setText(Integer.toString(jObject.getInt("points")));
+                            username.setText(jObject.getString("username"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).execute();
+
+
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        rankingLayout.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, RankingActivity.class);
@@ -41,17 +97,19 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        LinearLayout konbertsoreaLayout = findViewById(R.id.home_konbertsoreaLayout);
-        konbertsoreaLayout.setOnClickListener(new View.OnClickListener() {
+        konbertsoreaLayout.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, CalculatorActivity.class);
+                Intent intent = new Intent(MainActivity.this, KodDekodActivity.class);
                 startActivity(intent);
             }
         });
 
-        LinearLayout galdetegiakLayout = findViewById(R.id.home_galdetegiakLayout);
-        galdetegiakLayout.setOnClickListener(new View.OnClickListener() {
+        galdetegiakLayout.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, GaldetegiZerrendaActivity.class);
@@ -59,86 +117,51 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        final LinearLayout progLayout = findViewById(R.id.home_programLayout);
 
-        progLayout.setOnClickListener(new View.OnClickListener() {
+        progLayout.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View view) {
                 // TODO Popup
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
-                View dialogView = getLayoutInflater().inflate(R.layout.program_type_popup, null);
-                mBuilder.setView(dialogView);
-                final AlertDialog alertDialog = mBuilder.create();
-                final RadioGroup radioGroup = dialogView.findViewById(R.id.popup_radioGroup);
-                Button hasButton = dialogView.findViewById(R.id.popup_hasiButton);
-
-                hasButton.setOnClickListener(new View.OnClickListener() {
+                mBuilder.setTitle(R.string.programaMota);
+                mBuilder.setPositiveButton(R.string.while_radio_button, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent(MainActivity.this, ProgActivity.class);
-                        switch (radioGroup.getCheckedRadioButtonId()) {
-                            case R.id.WPradioButton:
-                                // TODO Send parameters in the intent
-                                break;
-                            case R.id.MPradioButton:
-                                // TODO Send parameters in the intent
-                                break;
-                        }
+                        // TODO Send parameters in the intent
                         startActivity(intent);
                     }
                 });
-
-                ImageView closeButton = dialogView.findViewById(R.id.close_popup);
-                closeButton.setOnClickListener(new View.OnClickListener() {
+                mBuilder.setNeutralButton(R.string.makro_radio_button, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
-                        alertDialog.dismiss();
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(MainActivity.this, ProgActivity.class);
+                        // TODO Send parameters in the intent
+                        startActivity(intent);
                     }
                 });
+                final AlertDialog alertDialog = mBuilder.create();
                 alertDialog.show();
 
             }
         });
+
+
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (this.drawer.isDrawerOpen(GravityCompat.START)) {
+            this.drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
-            SharedPrefManager.getInstance(this).logout();
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -150,18 +173,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(myIntent);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        this.drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-
-    public String getPath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        int column_index = cursor
-                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
     }
 }

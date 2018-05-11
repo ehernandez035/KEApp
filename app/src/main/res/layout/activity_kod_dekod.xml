@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="es.ehu.ehernandez035.kea.activities.ProgActivity">
+    tools:context=".activities.KodDekodActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/appBarHeight"
             android:layout_weight="1"
+            android:background="@color/colorPrimary"
             app:layout_scrollFlags="enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="@string/app_name">
@@ -27,21 +28,27 @@
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayaout"
+            android:id="@+id/tabLayout_kod_dekod"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <android.support.design.widget.TabItem
-                android:id="@+id/param"
+                android:id="@+id/konbertsorea_tabItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_param" />
+                android:text="@string/konbertsorea" />
 
             <android.support.design.widget.TabItem
-                android:id="@+id/prog"
+                android:id="@+id/kod_tabItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_prog" />
+                android:text="@string/kod" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/dekod_tabItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/deskod" />
 
 
         </android.support.design.widget.TabLayout>

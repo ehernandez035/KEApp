@@ -26,9 +26,9 @@ private ImageView iv;
         //tv.startAnimation(splashAnimation);
         //iv.startAnimation(splashAnimation);
 
-        Animator fade = ObjectAnimator.ofFloat(iv, View.ALPHA, 0.0f, 1.0f).setDuration(1500);
-        ObjectAnimator smallX = ObjectAnimator.ofFloat(iv, View.SCALE_X, 1.0f, 0.9f).setDuration(750);
-        ObjectAnimator smallY = ObjectAnimator.ofFloat(iv, View.SCALE_Y, 1.0f, 0.9f).setDuration(750);
+        Animator fade = ObjectAnimator.ofFloat(iv, View.ALPHA, 0.0f, 1.0f).setDuration(500);
+        ObjectAnimator smallX = ObjectAnimator.ofFloat(iv, View.SCALE_X, 1.0f, 0.9f).setDuration(500);
+        ObjectAnimator smallY = ObjectAnimator.ofFloat(iv, View.SCALE_Y, 1.0f, 0.9f).setDuration(500);
 
         smallX.setRepeatCount(ObjectAnimator.INFINITE);
         smallX.setRepeatMode(ObjectAnimator.REVERSE);
@@ -51,7 +51,7 @@ private ImageView iv;
             @Override
             public void run() {
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }finally{

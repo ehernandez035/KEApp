@@ -3,38 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="es.ehu.ehernandez035.kea.activities.CalculatorActivity">
+    android:layout_height="match_parent">
 
     <Spinner
         android:id="@+id/sarrera_spinner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/sarreraMotaTV"
-        tools:layout_editor_absoluteX="0dp" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/calculatorView"
-        android:textSize="18sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/sarreraMotaTV" />
 
     <Spinner
         android:id="@+id/irteera_spinner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/bihurketaTV"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bihurketaTV" />
 
     <EditText
         android:id="@+id/sarreraBalioakET"
@@ -59,7 +54,8 @@
         android:layout_marginTop="8dp"
         android:text="@string/emaitza_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/irteera_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/irteera_spinner"
+        android:layout_marginLeft="8dp" />
 
     <Button
         android:id="@+id/bihurketaButton"
@@ -95,7 +91,8 @@
         android:layout_marginTop="8dp"
         android:text="@string/AlfabetoaTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="8dp" />
 
     <TextView
         android:id="@+id/sarreraTV"
@@ -105,7 +102,8 @@
         android:layout_marginTop="8dp"
         android:text="@string/sarreraTV"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sarrera_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/sarrera_spinner"
+        android:layout_marginLeft="8dp" />
 
     <TextView
         android:id="@+id/bihurketaTV"
@@ -137,5 +135,6 @@
         android:layout_marginStart="8dp"
         android:text="@string/sarreraMotaTV"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alfabetoaET" />
+        app:layout_constraintTop_toBottomOf="@+id/alfabetoaET"
+        android:layout_marginLeft="8dp" />
 </android.support.constraint.ConstraintLayout>

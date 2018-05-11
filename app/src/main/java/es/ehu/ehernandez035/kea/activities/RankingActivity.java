@@ -3,11 +3,10 @@ package es.ehu.ehernandez035.kea.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -20,15 +19,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import es.ehu.ehernandez035.kea.R;
+import es.ehu.ehernandez035.kea.RequestCallback;
+import es.ehu.ehernandez035.kea.ServerRequest;
 import es.ehu.ehernandez035.kea.SharedPrefManager;
-import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 public class RankingActivity extends AppCompatActivity {
     private TableLayout table;
     private ProgressBar mProgressView;
     private TextView myranking;
     private LinearLayout rankingContainer;
+    private ServerRequest myRankingTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +47,61 @@ public class RankingActivity extends AppCompatActivity {
         table = findViewById(R.id.ranking_table);
         mProgressView = findViewById(R.id.rankingProgress);
 
-        RankingTask mAuthTask = new RankingTask();
-        mAuthTask.execute((Void) null);
+        new ServerRequest(this, "http://elenah.duckdns.org/ranking.php", new RequestCallback() {
+            @Override
+            public void onSuccess(Response response) throws IOException {
+                String result = response.body().string();
+                showProgress(false);
+                if (result != null) {
+                    try {
+                        JSONObject jObject = new JSONObject(result);
+                        int status = jObject.getInt("status");
+                        if (status == 0) {
+                            AlertDialog.Builder b = new AlertDialog.Builder(RankingActivity.this);
+                            b.setMessage(R.string.connection_error);
+                        } else {
+                            JSONArray data = jObject.getJSONArray("data");
+                            for (int i = 0; i < data.length(); i++) {
+                                JSONObject elem = data.getJSONObject(i);
+                                TableRow row = (TableRow) LayoutInflater.from(RankingActivity.this).inflate(R.layout.user_item, null);
+                                ((TextView) row.findViewById(R.id.usernameTV)).setText(elem.getString("user"));
+                                ((TextView) row.findViewById(R.id.pointTV)).setText(Integer.toString(elem.getInt("points")));
+                                ((TextView) row.findViewById(R.id.rankingPosTV)).setText(Integer.toString(i + 1));
+                                table.addView(row);
+                            }
+                            myRankingTask.execute();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-        myranking = findViewById(R.id.myrankingTV);
+                }
+            }
+        }).execute();
+
+        myranking = findViewById(R.id.ranking_your_position);
         rankingContainer = findViewById(R.id.rankingContainer);
 
-        MyRankingTask myRankingTask = new MyRankingTask();
-        myRankingTask.execute((Void) null);
+
+        this.myRankingTask = new ServerRequest(this, "http://elenah.duckdns.org/myranking.php", new RequestCallback() {
+            @Override
+            public void onSuccess(Response response) throws IOException {
+                String result = response.body().string();
+                showProgress(false);
+                if (result != null) {
+                    try {
+                        int rank = Integer.parseInt(result);
+                        if (rank <= 0) {
+                            Snackbar.make(table, R.string.connection_error, Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            myranking.setText(result);
+                        }
+                    } catch (NumberFormatException e) {
+                        Snackbar.make(table, R.string.connection_error, Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -79,121 +130,6 @@ public class RankingActivity extends AppCompatActivity {
                 mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
-    }
-
-    public class RankingTask extends AsyncTask<Void, Void, String> {
-
-        private final OkHttpClient client;
-
-        RankingTask() {
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.followRedirects(false);
-            client = builder.build();
-        }
-
-
-        @Override
-        protected String doInBackground(Void... params) {
-            okhttp3.Request request = new okhttp3.Request.Builder()
-                    .url("http://elenah.duckdns.org/ranking.php")
-                    .build();
-            try {
-                okhttp3.Response response = client.newCall(request).execute();
-                return response.body().string();
-            } catch (Exception e) {
-                Log.e("KEA", "Error in the ranking", e);
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final String result) {
-            showProgress(false);
-            if (result != null) {
-                try {
-                    JSONObject jObject = new JSONObject(result);
-                    int status = jObject.getInt("status");
-                    if (status == 0) {
-                        //TODO: connection error
-                    } else {
-                        JSONArray data = jObject.getJSONArray("data");
-                        for (int i = 0; i < data.length(); i++) {
-                            JSONObject elem = data.getJSONObject(i);
-                            TableRow row = (TableRow) LayoutInflater.from(RankingActivity.this).inflate(R.layout.user_item, null);
-                            ((TextView) row.findViewById(R.id.usernameTV)).setText(elem.getString("user"));
-                            ((TextView) row.findViewById(R.id.pointTV)).setText(Integer.toString(elem.getInt("points")));
-                            ((TextView) row.findViewById(R.id.rankingPosTV)).setText(Integer.toString(i + 1));
-                            table.addView(row);
-                        }
-                        new MyRankingTask().execute();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            showProgress(false);
-        }
-    }
-
-    public class MyRankingTask extends AsyncTask<Void, Void, String> {
-
-        private final OkHttpClient client;
-
-        MyRankingTask() {
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.followRedirects(false);
-            client = builder.build();
-        }
-
-
-        @Override
-        protected String doInBackground(Void... params) {
-            String cookie = SharedPrefManager.getInstance(RankingActivity.this).getCookie();
-            Log.d("GAL", cookie);
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .build();
-            okhttp3.Request request = new okhttp3.Request.Builder()
-                    .url("http://elenah.duckdns.org/myranking.php")
-                    .header("Cookie", "PHPSESSID=" + cookie)
-                    .build();
-            try {
-                okhttp3.Response response = client.newCall(request).execute();
-                return response.body().string();
-            } catch (Exception e) {
-                Log.e("KEA", "Error in the ranking", e);
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final String result) {
-            showProgress(false);
-            if (result != null) {
-                try {
-                    int rank = Integer.parseInt(result);
-                    if (rank <= 0) {
-                        Snackbar.make(table, R.string.connection_error, Snackbar.LENGTH_SHORT).show();
-                    } else {
-                        String username = SharedPrefManager.getInstance(RankingActivity.this).getUsername();
-                        myranking.setText(result + " : " + username);
-                    }
-                } catch (NumberFormatException e) {
-                    Snackbar.make(table, R.string.connection_error, Snackbar.LENGTH_SHORT).show();
-                }
-
-
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            showProgress(false);
-        }
     }
 
 }

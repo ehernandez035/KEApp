@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -20,14 +19,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import es.ehu.ehernandez035.kea.R;
+import es.ehu.ehernandez035.kea.RequestCallback;
+import es.ehu.ehernandez035.kea.ServerRequest;
 import es.ehu.ehernandez035.kea.SharedPrefManager;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -38,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private ServerRequest mAuthTask = null;
 
     // UI references.
     private EditText usernameET;
@@ -86,9 +89,56 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-            CheckLoggedInTask task = new CheckLoggedInTask();
-            task.execute();
+            showProgress(true);
+            new ServerRequest(this, "http://elenah.duckdns.org/login.php", new RequestCallback() {
+                @Override
+                public void onSuccess(Response response) throws IOException {
+                    showProgress(false);
+                    mAuthTask = null;
+                    String result = response.body().string();
+
+                    if ("0".equals(result)) {
+                        get_user_info();
+                    } else if ("3".equals(result)) {
+                        Snackbar.make(mLoginFormView, R.string.session_expired, Snackbar.LENGTH_LONG).show();
+                    } else {
+                        Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
+                    }
+                }
+            }).setErrorListener(new Runnable() {
+                @Override
+                public void run() {
+                    showProgress(false);
+                    Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
+                }
+            }).execute();
         }
+    }
+
+    private void get_user_info() {
+        new ServerRequest(this, "http://elenah.duckdns.org/userInfo.php", new RequestCallback() {
+            @Override
+            public void onSuccess(Response response) throws IOException {
+                showProgress(false);
+                try {
+                    JSONObject obj = new JSONObject(response.body().string());
+
+                    if (obj.getInt("status") == 1) {
+                        String username = obj.getString("username");
+                        int level = obj.getInt("level");
+                        int points = obj.getInt("points");
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("username", username);
+                        intent.putExtra("level", level);
+                        intent.putExtra("points", points);
+                        startActivity(intent);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
+            }
+        }).execute();
     }
 
 
@@ -107,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordET.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = usernameET.getText().toString();
+        final String username = usernameET.getText().toString();
         String password = passwordET.getText().toString();
 
         boolean cancel = false;
@@ -141,11 +191,69 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(username, password);
-            mAuthTask.execute((Void) null);
+
+            Map<String, String> params = new HashMap<>();
+            params.put("username", username);
+            params.put("password", password);
+
+            mAuthTask = new ServerRequest(this, "http://elenah.duckdns.org/login.php", params, new RequestCallback() {
+                @Override
+                public void onSuccess(Response response) throws IOException {
+                    mAuthTask = null;
+                    showProgress(false);
+                    if (response == null) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(LoginActivity.this);
+                        b.setMessage(R.string.connection_error);
+                        b.setIcon(android.R.drawable.ic_dialog_alert);
+                        b.show();
+                        return;
+                    }
+                    int status;
+                    try {
+                        status = Integer.parseInt(response.body().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    usernameET.setError(null);
+                    if (status == 0) {
+                        String cookie = response.headers().get("Set-Cookie");
+                        String[] parts = cookie.split(";")[0].split("=");
+                        Log.d("GAL", "Cookie: " + parts[1]);
+                        if (!parts[0].equals("PHPSESSID")) {
+                            AlertDialog.Builder b = new AlertDialog.Builder(LoginActivity.this);
+                            b.setMessage(R.string.connection_error);
+                            b.setIcon(android.R.drawable.ic_dialog_alert);
+                            b.show();
+                        } else {
+                            showProgress(true);
+                            SharedPrefManager.getInstance(LoginActivity.this).userLogin(username, parts[1]);
+                            get_user_info();
+                        }
+
+
+                    } else {
+                        switch (status) {
+                            case 1:
+                                usernameET.setError(getString(R.string.error_invalid_credentials));
+                                usernameET.requestFocus();
+                                break;
+
+                            case 2:
+                                AlertDialog.Builder b = new AlertDialog.Builder(LoginActivity.this);
+                                b.setMessage(R.string.connection_error);
+                                b.setIcon(android.R.drawable.ic_dialog_alert);
+                                b.show();
+                                break;
+
+                        }
+                    }
+                }
+            }).withoutCookie();
+            mAuthTask.execute();
         }
     }
-
 
     private boolean isPasswordValid(String password) {
         String passwordRegex = "[A-Z0-9a-z._%+\\-]{6,}";
@@ -186,145 +294,6 @@ public class LoginActivity extends AppCompatActivity {
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    public class UserLoginTask extends AsyncTask<Void, Void, Response> {
-
-        private final String mUsername;
-        private final String mPassword;
-        private final OkHttpClient client;
-
-        UserLoginTask(String username, String password) {
-            mUsername = username;
-            mPassword = password;
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.followRedirects(false);
-            client = builder.build();
-        }
-
-
-        @Override
-        protected Response doInBackground(Void... params) {
-            FormBody.Builder formbuilder = new FormBody.Builder();
-            formbuilder.add("username", mUsername);
-            formbuilder.add("password", mPassword);
-            RequestBody body = formbuilder.build();
-            okhttp3.Request request = new okhttp3.Request.Builder()
-                    .url("http://elenah.duckdns.org/login.php")
-                    .post(body)
-                    .build();
-            try {
-                okhttp3.Response response = client.newCall(request).execute();
-                return response;
-            } catch (Exception e) {
-                Log.e("KEA", "Error logging in", e);
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final Response response) {
-            mAuthTask = null;
-            showProgress(false);
-            int status = 0;
-            if (response == null) {
-                AlertDialog.Builder b = new AlertDialog.Builder(LoginActivity.this);
-                b.setMessage(R.string.connection_error);
-                b.setIcon(android.R.drawable.ic_dialog_alert);
-                b.show();
-                return;
-            }
-            try {
-                status = Integer.parseInt(response.body().string());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-
-            usernameET.setError(null);
-            if (status == 0) {
-                String cookie = response.headers().get("Set-Cookie");
-                String[] parts = cookie.split(";")[0].split("=");
-                Log.d("GAL", "Cookie: " + parts[1]);
-                if (!parts[0].equals("PHPSESSID")) {
-                    AlertDialog.Builder b = new AlertDialog.Builder(LoginActivity.this);
-                    b.setMessage(R.string.connection_error);
-                    b.setIcon(android.R.drawable.ic_dialog_alert);
-                    b.show();
-                } else {
-                    SharedPrefManager.getInstance(LoginActivity.this).userLogin(mUsername, parts[1]);
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                }
-
-
-            } else {
-                switch (status) {
-                    case 1:
-                        usernameET.setError(getString(R.string.error_invalid_credentials));
-                        usernameET.requestFocus();
-                        break;
-
-                    case 2:
-                        AlertDialog.Builder b = new AlertDialog.Builder(LoginActivity.this);
-                        b.setMessage(R.string.connection_error);
-                        b.setIcon(android.R.drawable.ic_dialog_alert);
-                        b.show();
-                        break;
-
-                }
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
-
-
-    public class CheckLoggedInTask extends AsyncTask<Void, Void, String> {
-
-        private final OkHttpClient client;
-
-        CheckLoggedInTask() {
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.followRedirects(false);
-            client = builder.build();
-        }
-
-
-        @Override
-        protected String doInBackground(Void... params) {
-            String cookie = SharedPrefManager.getInstance(LoginActivity.this).getCookie();
-            okhttp3.Request request = new okhttp3.Request.Builder()
-                    .url("http://elenah.duckdns.org/login.php")
-                    .header("Cookie", "PHPSESSID=" + cookie)
-                    .build();
-            try {
-                okhttp3.Response response = client.newCall(request).execute();
-                return response.body().string();
-            } catch (Exception e) {
-                Log.e("KEA", "Error logging in", e);
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final String response) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if ("0".equals(response)) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-            } else if ("3".equals(response)) {
-                Snackbar.make(mLoginFormView, R.string.session_expired, Snackbar.LENGTH_LONG).show();
-            } else {
-                Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
-            }
         }
     }
 }
