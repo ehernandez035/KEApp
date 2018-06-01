@@ -8,66 +8,30 @@
     tools:context=".fragments.KodFragment">
 
     <TextView
-        android:id="@+id/section_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1" />
-
-    <TextView
         android:id="@+id/kod_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/kod_string"
         android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/kod_run_TV"
+        app:layout_constraintBottom_toBottomOf="@+id/kod_kopET"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/kod_run_TV" />
+        app:layout_constraintTop_toTopOf="@+id/kod_kopET" />
 
     <EditText
         android:id="@+id/kod_kopET"
         android:layout_width="54dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="@+id/kod_run_TV"
-        app:layout_constraintStart_toEndOf="@+id/textView8"
-        app:layout_constraintTop_toTopOf="@+id/kod_run_TV"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/kod_run_TV"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/circleorange"
-        android:gravity="center_vertical"
-        android:text="→"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView9"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/kod_textView"
+        app:layout_constraintTop_toTopOf="@+id/kod_run_TV" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/kod_valRV"
@@ -101,9 +65,9 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:gravity="center"
         android:text="@string/emaitza_title"
         app:layout_constraintBottom_toBottomOf="@+id/emaitzakod_TV"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,43 +75,31 @@
 
     <TextView
         android:id="@+id/emaitzakod_TV"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView6" />
 
-    <TextView
-        android:id="@+id/textView8"
+    <ImageView
+        android:id="@+id/kod_run_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="("
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/kod_kopET"
-        app:layout_constraintStart_toEndOf="@+id/kod_textView"
-        app:layout_constraintTop_toTopOf="@+id/kod_kopET" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text=")"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/kod_kopET"
+        app:srcCompat="@drawable/pink_arrow"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/kod_kopET"
-        app:layout_constraintTop_toTopOf="@+id/kod_kopET" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

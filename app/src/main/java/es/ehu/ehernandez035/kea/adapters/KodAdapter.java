@@ -17,11 +17,14 @@ import es.ehu.ehernandez035.kea.R;
 
 public class KodAdapter extends RecyclerView.Adapter<KodAdapter.ViewHolder> {
     private final List<String> mValues;
+    private final List<Boolean> invalid;
 
     public KodAdapter(int kop) {
         mValues = new ArrayList<>();
+        invalid = new ArrayList<>();
         for (int i=0;i<kop;i++){
             mValues.add("");
+            invalid.add(false);
         }
     }
 
@@ -37,6 +40,11 @@ public class KodAdapter extends RecyclerView.Adapter<KodAdapter.ViewHolder> {
         holder.kodHitza.setText(mValues.get(position));
 
         if (holder.watcher != null) holder.kodHitza.removeTextChangedListener(holder.watcher);
+        if (invalid.get(position)) {
+            holder.kodHitza.setError(holder.kodHitza.getContext().getString(R.string.kod_invalid_value));
+        } else {
+            holder.kodHitza.setError(null);
+        }
         final TextWatcher newWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -69,6 +77,12 @@ public class KodAdapter extends RecyclerView.Adapter<KodAdapter.ViewHolder> {
 
     public List<String> getValues() {
         return mValues;
+    }
+
+    public void setInvalid(int position) {
+        if (position < 0 || position >= invalid.size()) return;
+        invalid.set(position, true);
+        this.notifyItemChanged(position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

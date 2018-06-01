@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,25 +42,6 @@ public class ParamListAdapter extends RecyclerView.Adapter<ParamListAdapter.View
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.varName.setText("X" + (position + 1) + ":");
-        holder.varValue.setText(mValues.get(position));
-
-        boolean error = false;
-        EditText val = holder.mView.findViewById(R.id.data);
-        for (char c : holder.varValue.getText().toString().toCharArray()) {
-            if (!alfabetoa.contains(c)) {
-                if (val.getError() == null) {
-                    val.setError(holder.mView.getContext().getString(R.string.letter_not_in_alphabet));
-                }
-                error = true;
-                break;
-            }
-        }
-        if (!error && val.getError() != null) {
-            val.setError(null);
-        }
-
-
         if (holder.watcher != null) holder.varValue.removeTextChangedListener(holder.watcher);
         final TextWatcher newWatcher = new TextWatcher() {
             @Override
@@ -104,6 +86,28 @@ public class ParamListAdapter extends RecyclerView.Adapter<ParamListAdapter.View
         };
         holder.watcher = newWatcher;
         holder.varValue.addTextChangedListener(newWatcher);
+
+
+        holder.varName.setText("X" + (position + 1) + ":");
+        holder.varValue.setText(mValues.get(position));
+
+        boolean error = false;
+        EditText val = holder.mView.findViewById(R.id.data);
+        for (char c : holder.varValue.getText().toString().toCharArray()) {
+            if (!alfabetoa.contains(c)) {
+                if (val.getError() == null) {
+                    val.setError(holder.mView.getContext().getString(R.string.letter_not_in_alphabet));
+                }
+                error = true;
+                break;
+            }
+        }
+        if (!error && val.getError() != null) {
+            val.setError(null);
+        }
+
+        mValues.set(position, "");
+        holder.varValue.setText(holder.varValue.getText());
 
         holder.removeButton.setOnClickListener(new View.OnClickListener() {
             @Override

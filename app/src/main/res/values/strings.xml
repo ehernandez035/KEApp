@@ -2,31 +2,19 @@
     <string name="app_name" translatable="false">KEApp</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_connecting">Error during the connexion</string>
 
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">The password needs to be 6+ character long</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="title_activity_register">Sign in</string>
+    <string name="error_invalid_email">Email helbidea ez da baliozkoa</string>
+    <string name="error_invalid_password">Pasahitzak 6 karaktere izan behar ditu gutxienez</string>
+    <string name="error_incorrect_password">Pasahitza ez da zuzena</string>
+    <string name="error_field_required">Eremu hau beharrezkoa da</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_settings">Konfigurazioa</string>
 
-    <string name="action_logout">Log out</string>
-    <string name="title_activity_settings">Settings</string>
-
-    <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
+    <string name="pref_header_general">Orokorra</string>
 
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact
@@ -86,7 +74,7 @@
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_header_notifications">Notifikazioak</string>
 
     <string name="pref_title_new_message_notifications">New message notifications</string>
 
@@ -94,22 +82,12 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="title_activity_execute">ExecuteActivity</string>
-    <string name="title_activity_variables">variablesActivity</string>
-    <string name="title_activity_while">WhileActivity</string>
-
     <string name="title_param">Parametroak</string>
     <string name="title_prog">Programa</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_exek">ExekActivity</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="title_activity_prog">ProgActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
+    <string name="action_settings">Konfigurazioa</string>
+    <string name="title_activity_prog">Programak</string>
     <string name="program_title" translatable="false">Programa:</string>
     <string name="emaitza_title">Emaitza:</string>
     <string name="exek_title">Exekutatu</string>
@@ -143,8 +121,7 @@
     <string name="passwordConfTV">Pasahitza errepikatu:</string>
     <string name="registerButton">Bidali</string>
     <string name="error_confirmation_password">Sartutako pasahitza ez da aurrekoaren berdina</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="email_value">Emaila</string>
+    <string name="title_activity_login">Saioa hasi</string>
     <string name="password_value">Pasahitza</string>
     <string name="password">Pasahitza:</string>
     <string name="title_activity_ranking">RankingActivity</string>
@@ -166,7 +143,7 @@
     <string name="programatu">Programak idatzi</string>
     <string name="programaMota">Programa mota aukeratu</string>
     <string name="hasi">Hasi!</string>
-    <string name="title_activity_galdetegi_zerrenda">GaldetegiZerrendaActivity</string>
+    <string name="title_activity_galdetegi_zerrenda">GaldetegiZerrenda</string>
     <string name="galdetegiZerrenda">Galdetegi zerrenda</string>
     <string name="galdetegi_izenburua">%1$d. Galdetegia</string>
     <string name="session_expired">Saioa iraungi da. Sartu berriro.</string>
@@ -175,12 +152,60 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="result_dialog_title">Asmatutako galdera kopurua:</string>
+    <string name="result_dialog_title">Asmatutako galdera kopurua</string>
     <string name="ranking_yourposition">Zure posizioa ranking-ean:</string>
     <string name="title_activity_kod_dekod">KodDekodActivity</string>
     <string name="kod">Kodeketa</string>
     <string name="deskod">Deskodeketa</string>
-    <string name="kod_string">kod</string>
+    <string name="kod_string">Elementu kopurua:</string>
     <string name="deskod_string">deskod</string>
+    <string name="malformed_input">Gaizki eratutako sarrera</string>
+    <string name="esperotakoBalioa">Zein balio espero duzu?</string>
+    <string name="question_ask_result">Galdera</string>
+    <string name="ondo">Ondo!</string>
+    <string name="emaitza_zuzena">Emaitza zuzena izan da!</string>
+    <string name="emaitza_okerra">Emaitza ez da esperotakoa</string>
+    <string name="okerra">Gaizki</string>
+    <string name="konbertsorea_zenbakia">Sartu zenbaki bat</string>
+    <string name="clear">Ezabatu</string>
+    <string name="kod_invalid_value">Sartu zenbaki bat</string>
+    <string name="konbertsorea_zenbaki_errorea">Sarrerako balioa zenbakia izan behar du</string>
+    <string name="registerTerminoak">Bai, %1$s Pribatutasun politika %2$s onartzen dut</string>
+    <string name="terminoakOnartu">Terminoak eta baldintzak onartu behar dira</string>
+    <string name="profile_emailaAldatu">Emaila aldatu:</string>
+    <string name="save">Gorde</string>
+    <string name="old_password">Aurreko pasahitza idatzi:</string>
+    <string name="profile">Profila</string>
+    <string name="username_changed">Erabiltzaile izena aldatu da</string>
+    <string name="username_taken">Erabiltzailea hartuta dago</string>
+    <string name="email_changed">Emaila aldatu da</string>
+    <string name="email_taken">Emaila hartuta dago</string>
+    <string name="email_invalid">Emaila ez da zuzena</string>
+    <string name="change_pass">Aurreko pasahitza idatzi</string>
+    <string name="pass_changeTittle">Pasahitza aldatu</string>
+    <string name="new_password">Pasahitz berria sartu</string>
+    <string name="confirm_newPass">Pasahitz berria errepikatu</string>
+    <string name="password_changed">Pasahitza aldatu da</string>
+    <string name="help">Laguntza</string>
+    <string name="load">Kargatu</string>
+    <string name="kodeketa_help">1. Kodetu nahi diren elementu kopurua idatzi\n
+2. Gezia sakatu\n
+3. Kodetu nahi diren hitzak idatzi\n
+4. Bihurtu tekla sakatu eta esperotako hitzaren zenbakia sartu
+    </string>
+    <string name="deskodeketa_help">1. Zenbat elementutan deskodetu nahi den adierazi\n
+2. Deskodetu nahi den zenbakizko hitza idatzi \n
+3. Gezia sakatu emaitza ikusteko</string>
+    <string name="help_konbertsorea" >1. Alfabetoa definitu\n
+    2. Sarrera balioaren datu mota aukeratu\n
+    3. Sarrerako balioa idatzi (pilak edo bektoreak badira, komen bitartez banandu elementuak)\n
+    4. Zein datu motera bihurtu nahi den aukeratu\n
+    5. Bihurtu botoia sakatu emaitza ikusteko</string>
+    <string name="delete_account">Kontua ezabatu</string>
+    <string name="delete_account_dialog_title">Kontua ezabatu</string>
+    <string name="delete_account_dialog_message">Ziur al zaude kontua ezabatu nahi duzula?</string>
+    <string name="delete_account_success">Kontua ezabatu egin da!</string>
+    <string name="prog_load_dialog_title">Programen list</string>
+    <string name="error_happened">Errore bat gertatu da</string>
 
 </resources>

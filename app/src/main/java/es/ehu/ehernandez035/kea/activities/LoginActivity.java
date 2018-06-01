@@ -88,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             showProgress(true);
             new ServerRequest(this, "http://elenah.duckdns.org/login.php", new RequestCallback() {
@@ -134,9 +135,9 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 } catch (JSONException e) {
+                    Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
-                Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
             }
         }).execute();
     }
@@ -164,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!isPasswordValid(password)) {
             passwordET.setError(getString(R.string.error_invalid_password));
             focusView = passwordET;
             cancel = true;
@@ -174,11 +175,6 @@ public class LoginActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(username)) {
             usernameET.setError(getString(R.string.error_field_required));
             focusView = usernameET;
-            cancel = true;
-        }
-        if (!isPasswordValid(password)) {
-            passwordET.setError(getString(R.string.error_invalid_password));
-            focusView = passwordET;
             cancel = true;
         }
 
@@ -212,6 +208,7 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         status = Integer.parseInt(response.body().string());
                     } catch (IOException e) {
+                        Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
                         e.printStackTrace();
                         return;
                     }
@@ -222,33 +219,29 @@ public class LoginActivity extends AppCompatActivity {
                         String[] parts = cookie.split(";")[0].split("=");
                         Log.d("GAL", "Cookie: " + parts[1]);
                         if (!parts[0].equals("PHPSESSID")) {
-                            AlertDialog.Builder b = new AlertDialog.Builder(LoginActivity.this);
-                            b.setMessage(R.string.connection_error);
-                            b.setIcon(android.R.drawable.ic_dialog_alert);
-                            b.show();
+                            Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
                         } else {
                             showProgress(true);
                             SharedPrefManager.getInstance(LoginActivity.this).userLogin(username, parts[1]);
                             get_user_info();
                         }
-
-
                     } else {
+                        Log.d("GAL", Integer.toString(status));
                         switch (status) {
-                            case 1:
+                            case 4:
                                 usernameET.setError(getString(R.string.error_invalid_credentials));
                                 usernameET.requestFocus();
                                 break;
-
-                            case 2:
-                                AlertDialog.Builder b = new AlertDialog.Builder(LoginActivity.this);
-                                b.setMessage(R.string.connection_error);
-                                b.setIcon(android.R.drawable.ic_dialog_alert);
-                                b.show();
+                            default:
+                                Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
                                 break;
-
                         }
                     }
+                }
+            }).setErrorListener(new Runnable() {
+                @Override
+                public void run() {
+                    Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
                 }
             }).withoutCookie();
             mAuthTask.execute();
@@ -257,7 +250,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isPasswordValid(String password) {
         String passwordRegex = "[A-Z0-9a-z._%+\\-]{6,}";
-        return !(TextUtils.isEmpty(password) && Pattern.matches(passwordRegex, password));
+        return !TextUtils.isEmpty(password) && Pattern.matches(passwordRegex, password);
     }
 
 

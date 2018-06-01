@@ -22,13 +22,6 @@ import es.ehu.ehernandez035.kea.adapters.ParamListAdapter;
 import es.ehu.ehernandez035.kea.R;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link ParamFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ParamFragment extends Fragment {
     private ParamChangedListener listener;
 
@@ -36,21 +29,6 @@ public class ParamFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ParamFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ParamFragment newInstance(String param1, String param2) {
-        ParamFragment fragment = new ParamFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,8 +36,6 @@ public class ParamFragment extends Fragment {
         if (getArguments() != null) {
 
         }
-
-
     }
 
     @Override
@@ -115,6 +91,7 @@ public class ParamFragment extends Fragment {
 
             }
         });
+        alf.setText(alf.getText());
 
 
         final FloatingActionButton addButton = this.getActivity().findViewById(R.id.addButton);
@@ -140,7 +117,6 @@ public class ParamFragment extends Fragment {
         if(listener!=null){
             listener.onParamChanged(mValues);
             Log.d("KEA_GAL", "paramChanged param");
-
         }
     }
 

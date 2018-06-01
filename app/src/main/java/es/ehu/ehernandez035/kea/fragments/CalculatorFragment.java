@@ -1,11 +1,16 @@
 package es.ehu.ehernandez035.kea.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -26,6 +31,7 @@ import es.ehu.ikasle.ehernandez035.makroprograma.Utils;
 public class CalculatorFragment extends Fragment {
 
     static Context context;
+    private Menu menu;
 
     private enum SarreraMotak {
         Hitza(R.string.hitza),
@@ -63,6 +69,38 @@ public class CalculatorFragment extends Fragment {
         public String toString() {
             return context.getString(resourceId);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_kod_dekod, menu);
+        this.menu = menu;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_help:
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                View view = getActivity().getLayoutInflater().inflate(R.layout.help_konbertsorea, null);
+                alert.setView(view);
+                alert.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                alert.show();
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -107,7 +145,9 @@ public class CalculatorFragment extends Fragment {
                         irteeraMotak = new IrteeraMotak[]{IrteeraMotak.Hitza, IrteeraMotak.Pila, IrteeraMotak.Bektore};
                         break;
                 }
-                irteeraSpinner.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, irteeraMotak));
+                ArrayAdapter<IrteeraMotak> irteeraAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, irteeraMotak);
+                irteeraAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                irteeraSpinner.setAdapter(irteeraAdapter);
 
 
                 bihurketaButton.setEnabled(true);
@@ -121,8 +161,9 @@ public class CalculatorFragment extends Fragment {
             }
         });
 
-
-        irteeraSpinner.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, new IrteeraMotak[]{}));
+        ArrayAdapter<IrteeraMotak> irteeraAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, new IrteeraMotak[]{});
+        irteeraAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        irteeraSpinner.setAdapter(irteeraAdapter);
 
 
         bihurketaButton.setOnClickListener(new View.OnClickListener() {
@@ -134,11 +175,23 @@ public class CalculatorFragment extends Fragment {
                     if (letra.isEmpty()) continue;
                     alfLista.add(letra.charAt(0));
                 }
-
+                String sarrera = sarreraText.getText().toString().replaceAll("\\s", "");
                 SarreraMotak sarreraMota = (SarreraMotak) sarreraSpinner.getSelectedItem();
                 IrteeraMotak irteeraMota = (IrteeraMotak) irteeraSpinner.getSelectedItem();
+                if (sarreraMota != SarreraMotak.Pila && sarreraMota != SarreraMotak.Bektore && sarrera.contains(",")) {
+                    sarreraText.setError(getString(R.string.malformed_input));
+                    return;
+                }
+                if (sarreraMota == SarreraMotak.Zenbaki && !isNumeric(sarrera)) {
+                    sarreraText.setError(getString(R.string.konbertsorea_zenbaki_errorea));
+                    return;
+                }
+                if (sarreraMota != SarreraMotak.Zenbaki && isNumeric(sarrera)) {
+                    sarreraText.setError(getString(R.string.malformed_input));
+                    return;
+                }
 
-                String sarrera = sarreraText.getText().toString().replaceAll("\\s", "");
+
                 String sarreraGarbia = sarrera.replaceAll("[,<\\]()0-9]", "");
                 for (char c : sarreraGarbia.toCharArray()) {
                     if (!alfLista.contains(c)) {
@@ -161,7 +214,7 @@ public class CalculatorFragment extends Fragment {
                         hitzModuan = Utils.bektoretikHitzera(alfLista, Arrays.asList(sarrera.split(",")));
                         break;
                     case Zenbaki:
-                        hitzModuan = Utils.zenbakiaHitzera(alfLista, Utils.hitzakZenbakira(alfLista, sarrera));
+                        hitzModuan = Utils.zenbakiaHitzera(alfLista, new BigInteger(sarrera));
                         break;
                 }
 
@@ -173,7 +226,7 @@ public class CalculatorFragment extends Fragment {
                         StringBuilder sbpila = new StringBuilder("< ");
                         ArrayList<String> hitzak = Utils.hitzetikPilera(alfLista, hitzModuan);
                         for (int i = 0; i < hitzak.size(); i++) {
-                            sbpila.append(hitzak.get(i));
+                            sbpila.append(hitzak.get(i).isEmpty() ? "ε" : hitzak.get(i));
                             if (i != hitzak.size() - 1) {
                                 sbpila.append(", ");
                             }
@@ -185,7 +238,7 @@ public class CalculatorFragment extends Fragment {
                         StringBuilder sbbek = new StringBuilder("( ");
                         ArrayList<String> hitzakB = Utils.hitzetikBektorera(alfLista, hitzModuan);
                         for (int i = 0; i < hitzakB.size(); i++) {
-                            sbbek.append(hitzakB.get(i));
+                            sbbek.append(hitzakB.get(i).isEmpty() ? "ε" : hitzakB.get(i));
                             if (i != hitzakB.size() - 1) {
                                 sbbek.append(", ");
                             }
@@ -205,5 +258,9 @@ public class CalculatorFragment extends Fragment {
 
     }
 
+    public static boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
+    }
 
 }
+

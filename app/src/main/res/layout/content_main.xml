@@ -32,7 +32,7 @@
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:background="@drawable/circleturquoise"
+                    android:background="@drawable/circleblue"
                     android:padding="10dp"
                     app:srcCompat="@drawable/ic_public_black_24dp" />
 
@@ -183,7 +183,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Hitzak beste DMAra bbihurtzeko erreminta"
+                    android:text="Hitzak beste DMAra bihurtzeko erreminta"
                     android:textColor="@color/gray" />
 
             </LinearLayout>

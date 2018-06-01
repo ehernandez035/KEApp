@@ -25,6 +25,7 @@ import java.io.IOException;
 import es.ehu.ehernandez035.kea.R;
 import es.ehu.ehernandez035.kea.RequestCallback;
 import es.ehu.ehernandez035.kea.ServerRequest;
+import es.ehu.ehernandez035.kea.SharedPrefManager;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity
@@ -87,63 +88,60 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        rankingLayout.setOnClickListener(new View.OnClickListener()
-
-        {
+        rankingLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, RankingActivity.class);
+                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
         });
 
-        konbertsoreaLayout.setOnClickListener(new View.OnClickListener()
-
-        {
+        konbertsoreaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, KodDekodActivity.class);
+                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
         });
 
-        galdetegiakLayout.setOnClickListener(new View.OnClickListener()
-
-        {
+        galdetegiakLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, GaldetegiZerrendaActivity.class);
+                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
         });
 
 
-        progLayout.setOnClickListener(new View.OnClickListener()
-
-        {
+        progLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO Popup
-                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
-                mBuilder.setTitle(R.string.programaMota);
-                mBuilder.setPositiveButton(R.string.while_radio_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+//                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+//                mBuilder.setTitle(R.string.programaMota);
+//                mBuilder.setPositiveButton(R.string.while_radio_button, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent(MainActivity.this, ProgActivity.class);
+                        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                         // TODO Send parameters in the intent
                         startActivity(intent);
-                    }
-                });
-                mBuilder.setNeutralButton(R.string.makro_radio_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent = new Intent(MainActivity.this, ProgActivity.class);
-                        // TODO Send parameters in the intent
-                        startActivity(intent);
-                    }
-                });
-                final AlertDialog alertDialog = mBuilder.create();
-                alertDialog.show();
+//                    }
+//                });
+//                mBuilder.setNeutralButton(R.string.makro_radio_button, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        Intent intent = new Intent(MainActivity.this, ProgActivity.class);
+//                        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                        // TODO Send parameters in the intent
+//                        startActivity(intent);
+//                    }
+//                });
+//                final AlertDialog alertDialog = mBuilder.create();
+//                alertDialog.show();
 
             }
         });
@@ -165,12 +163,22 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_manage) {
+        /*if (id == R.id.nav_manage) {
             Intent myIntent = new Intent(this, SettingsActivity.class);
             startActivity(myIntent);
-        } else if (id == R.id.logout) {
-            Intent myIntent = new Intent(this, RegisterActivity.class);
-            startActivity(myIntent);
+        } else */
+        if (id == R.id.logout) {
+            new ServerRequest(this, "http://elenah.duckdns.org/logout.php", new RequestCallback() {
+                @Override
+                public void onSuccess(Response response) throws IOException {
+                    SharedPrefManager.getInstance(MainActivity.this).logout();
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            }).execute();
+        } else if (id == R.id.profile) {
+            Intent intent = new Intent(MainActivity.this, KonfigInfoActivity.class);
+            startActivity(intent);
         }
 
         this.drawer.closeDrawer(GravityCompat.START);

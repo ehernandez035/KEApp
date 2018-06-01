@@ -69,7 +69,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_weight="1"
-                android:background="@drawable/circleturquoise"
+                android:background="@drawable/circleblue"
                 android:gravity="center"
                 android:paddingEnd="16dp"
                 android:paddingLeft="16dp"

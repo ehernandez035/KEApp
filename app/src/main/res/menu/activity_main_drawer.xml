@@ -5,14 +5,22 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item
+<!--        <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Settings" />
+            android:title="Settings" />-->
         <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
-            android:title="Log out" />
+            android:title="Saioa itxi" />
+        <item
+            android:id="@+id/profile"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="Profila" />
+        <item
+            android:id="@+id/config"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Konfigurazioa" />
     </group>
 
 </menu>

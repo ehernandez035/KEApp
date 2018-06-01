@@ -1,17 +1,22 @@
 package es.ehu.ehernandez035.kea.fragments;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,6 +24,8 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,46 +33,22 @@ import es.ehu.ehernandez035.kea.MakroRun;
 import es.ehu.ehernandez035.kea.R;
 import es.ehu.ehernandez035.kea.activities.ProgActivity;
 import es.ehu.ehernandez035.kea.adapters.ErrorListAdapter;
+import es.ehu.ehernandez035.kea.adapters.ProgListAdapter;
 import es.ehu.ikasle.ehernandez035.makroprograma.SZA.Errorea;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link ProgFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ProgFragment extends Fragment implements View.OnClickListener {
 
     private TextView lineNumbers;
     private EditText programText;
     private HorizontalScrollView horizontalScrollView;
+    private Menu menu;
+    private Thread execThread;
 
-
-    public ProgFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProgFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProgFragment newInstance(String param1, String param2) {
-        ProgFragment fragment = new ProgFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    // Gets the current position of the cursor
-    public int getEditSelection() {
-        return programText.getSelectionStart();
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -88,6 +71,110 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
         functionButton.setOnClickListener(this);
 
         return layout;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_prog, menu);
+        this.menu = menu;
+        this.menu.getItem(0).setOnMenuItemClickListener(this::programaExekutatu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.prog_execute_clear:
+                programText.setText("def main begin\n    \nend def;");
+                programText.setSelection(19);
+                return true;
+            case R.id.prog_execute_load:
+                loadProgram();
+                return true;
+            case R.id.prog_execute_save:
+                saveProgram();
+                return true;
+
+        }
+        return false;
+    }
+
+    private void saveProgram() {
+
+    }
+
+    private void loadProgram() {
+        new GetSavedProgramList(this).execute();
+    }
+
+    private boolean geldituPrograma(MenuItem item) {
+        if (execThread != null) {
+//            execThread.stop();
+            Snackbar.make(programText, "Oraingoz ezin da programa gelditu, itxi aplikazioa gelditzeko.", Snackbar.LENGTH_LONG).show();
+//            try {
+//                execThread.join();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+            execThread = null;
+        }
+
+        this.menu.getItem(0).setOnMenuItemClickListener(this::programaExekutatu);
+        return true;
+    }
+
+    private boolean programaExekutatu(MenuItem item) {
+        EditText programaText = getActivity().findViewById(R.id.programText);
+        final String programa = programaText.getText().toString();
+
+        final List<Character> alfabetoa = ((ProgActivity) getActivity()).getAlfabetoa();
+        final List<String> parametroak = ((ProgActivity) getActivity()).getParametroak();
+
+        menu.getItem(0).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+        this.menu.getItem(0).setOnMenuItemClickListener(this::geldituPrograma);
+
+        execThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final List<Errorea> erroreak = new ArrayList<>();
+
+                final String emaitza = MakroRun.exekutatu(programa, alfabetoa, parametroak, erroreak);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        menu.getItem(0).setIcon(android.R.drawable.ic_media_play);
+                        ProgFragment.this.menu.getItem(0).setOnMenuItemClickListener(ProgFragment.this::programaExekutatu);
+                        if (erroreak.isEmpty()) {
+                            TextView tvemaitza = getActivity().findViewById(R.id.emaitzaView);
+                            tvemaitza.setText(emaitza);
+                        } else {
+                            AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                            View mView = getActivity().getLayoutInflater().inflate(R.layout.error_alert, null);
+                            Button closeButton = (Button) mView.findViewById(R.id.closeError);
+                            RecyclerView list = mView.findViewById(R.id.error_list);
+
+                            list.setAdapter(new ErrorListAdapter(erroreak));
+                            list.setLayoutManager(new LinearLayoutManager(mView.getContext()));
+
+
+                            mBuilder.setView(mView);
+                            final AlertDialog dialog = mBuilder.create();
+                            dialog.show();
+
+                            closeButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.cancel();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }, "ExekuteThread");
+        execThread.start();
+        return true;
     }
 
     @Override
@@ -151,82 +238,6 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-
-        final Button exekuteBtn = (Button) getActivity().findViewById(R.id.exekButton);
-        exekuteBtn.setOnClickListener(new View.OnClickListener()
-
-        {
-            @Override
-            public void onClick(View view) {
-                EditText programaText = getActivity().findViewById(R.id.programText);
-                final String programa = programaText.getText().toString();
-
-                final List<Character> alfabetoa = ((ProgActivity) getActivity()).getAlfabetoa();
-                final List<String> parametroak = ((ProgActivity) getActivity()).getParametroak();
-
-                exekuteBtn.setText(R.string.gelditu_text);
-
-                final Thread execThread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final List<Errorea> erroreak = new ArrayList<>();
-
-                        final String emaitza = MakroRun.exekutatu(programa, alfabetoa, parametroak, erroreak);
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                exekuteBtn.setText(R.string.exek_title);
-
-
-                                if (erroreak.isEmpty()) {
-                                    TextView tvemaitza = getActivity().findViewById(R.id.emaitzaView);
-                                    tvemaitza.setText(emaitza);
-                                } else {
-                                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-                                    View mView = getActivity().getLayoutInflater().inflate(R.layout.error_alert, null);
-                                    Button closeButton = (Button) mView.findViewById(R.id.closeError);
-                                    RecyclerView list = mView.findViewById(R.id.error_list);
-
-                                    list.setAdapter(new ErrorListAdapter(erroreak));
-                                    list.setLayoutManager(new LinearLayoutManager(mView.getContext()));
-
-
-                                    mBuilder.setView(mView);
-                                    final AlertDialog dialog = mBuilder.create();
-                                    dialog.show();
-
-                                    closeButton.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            dialog.cancel();
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
-                }, "ExekuteThread");
-
-
-                /*exekuteBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        execThread.stop();
-                        try {
-                            execThread.join();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        exekuteBtn.setText(R.string.exek_title);
-                    }
-                });*/
-
-                execThread.start();
-
-            }
-        });
-
     }
 
     @Override
@@ -241,7 +252,7 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
                 cursorOffset = 4;
                 break;
             case R.id.consButton:
-                value = "cons_?()";
+                value = "cons_()";
                 cursorOffset = 5;
                 break;
             case R.id.ifButton:
@@ -267,5 +278,54 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
         programText.getEditableText().insert(cursorPosition, value);
         programText.setSelection(cursorPosition + cursorOffset);
 
+    }
+
+    static class GetSavedProgramList extends AsyncTask<Void, Void, List<String>> {
+
+        private final WeakReference<ProgFragment> context;
+
+        GetSavedProgramList(ProgFragment context) {
+            this.context = new WeakReference<>(context);
+        }
+
+        @Override
+        protected List<String> doInBackground(Void... voids) {
+            ProgFragment fragment = this.context.get();
+            if (fragment != null) {
+                Context context = fragment.getContext();
+                if (context != null) {
+                    List<String> paths = new ArrayList<>();
+
+                    File dir = context.getDir("programs", Context.MODE_PRIVATE);
+                    for (File f : dir.listFiles()) {
+                        paths.add(f.getAbsolutePath());
+                    }
+                    return paths;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<String> paths) {
+            ProgFragment fragment = this.context.get();
+            if (fragment != null) {
+                Context context = fragment.getContext();
+                if (context != null) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle(R.string.prog_load_dialog_title);
+                    RecyclerView rv = new RecyclerView(context);
+
+                    rv.setLayoutManager(new LinearLayoutManager(context));
+                    builder.setView(rv);
+                    builder.show();
+                    rv.setAdapter(new ProgListAdapter(fragment, paths));
+                }
+            }
+        }
+    }
+
+    public void setProgramText(String program) {
+        this.programText.setText(program);
     }
 }

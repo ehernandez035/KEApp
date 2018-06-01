@@ -10,11 +10,14 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -50,6 +53,8 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     RequestQueue queue;
+    private CheckBox terms;
+    private Button register;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +62,16 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         // Set up the login form.
         queue = Volley.newRequestQueue(this);
-        email = (EditText) findViewById(R.id.emailET);
-        password = (EditText) findViewById(R.id.passwordET);
-        passwordConf = (EditText) findViewById(R.id.passwordConfET);
-        username = (EditText) findViewById(R.id.usernameET);
-        Button register = (Button) findViewById(R.id.registerButton);
+        email = findViewById(R.id.emailET);
+        password = findViewById(R.id.passwordET);
+        passwordConf = findViewById(R.id.passwordConfET);
+        username = findViewById(R.id.usernameET);
+        register = findViewById(R.id.registerButton);
         progressBar = findViewById(R.id.register_progress);
+        terms = findViewById(R.id.register_Terms_checkBox);
+        terms.setText(Html.fromHtml(getString(R.string.registerTerminoak, "<a href='http://elenah.duckdns.org/PrivacyPolicy.html'>", "</a>")));
+        terms.setClickable(true);
+        terms.setMovementMethod(LinkMovementMethod.getInstance());
 
 /*        password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -76,12 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
         });*/
 
 
-        register.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+        register.setOnClickListener(view -> attemptLogin());
 
     }
 
@@ -112,17 +116,6 @@ public class RegisterActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        // FIXME Temporal
-
-        if (usernameValue.isEmpty() && emailValue.isEmpty() && passwordValue.isEmpty() && passwordConfValue.isEmpty()) {
-            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-            startActivity(intent);
-            return;
-        }
-
-        //Check if username is valid
-        //TODO: check if a username is already taken or not
-
 
         // Check for a valid email address.
         if (!isEmailValid(emailValue)) {
@@ -145,6 +138,13 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (!passwordValue.equals(passwordConfValue)) {
             passwordConf.setError(getString(R.string.error_confirmation_password));
             focusView = passwordConf;
+            cancel = true;
+        }
+
+        if (!terms.isChecked()) {
+            Snackbar.make(terms, R.string.terminoakOnartu, Snackbar.LENGTH_LONG).show();
+            terms.setError(getString(R.string.terminoakOnartu));
+            focusView = terms;
             cancel = true;
         }
 
@@ -197,12 +197,12 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isEmailValid(String email) {
+    public static boolean isEmailValid(String email) {
         String emailRegex = "[A-Z0-9a-z._%+\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,64}";
         return !(TextUtils.isEmpty(email) && Pattern.matches(emailRegex, email));
     }
 
-    private boolean isPasswordValid(String password) {
+    public static boolean isPasswordValid(String password) {
         String passwordRegex = "[A-Z0-9a-z._%+\\-]{6,}";
         return !(TextUtils.isEmpty(password) && Pattern.matches(passwordRegex, password));
     }
@@ -267,11 +267,6 @@ public class RegisterActivity extends AppCompatActivity {
                         password.requestFocus();
                         break;
                     case 3:
-                        AlertDialog.Builder b = new AlertDialog.Builder(RegisterActivity.this);
-                        b.setMessage(R.string.connection_error);
-                        b.setIcon(android.R.drawable.ic_dialog_alert);
-                        b.show();
-                        break;
                     case 6:
                         Snackbar.make(email, R.string.connection_error, Snackbar.LENGTH_SHORT).show();
                         break;

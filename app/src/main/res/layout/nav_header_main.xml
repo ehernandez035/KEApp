@@ -34,7 +34,7 @@
             android:layout_alignTop="@+id/profileImage_nav"
             android:gravity="center"
             android:text="0"
-            android:textColor="@color/blue"
+            android:textColor="@color/green"
             android:textSize="24sp"
             android:textStyle="bold" />
     </RelativeLayout>

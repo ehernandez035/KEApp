@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="es.ehu.ehernandez035.kea.activities.KodDekodActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_help"
+        android:icon="@android:drawable/ic_menu_help"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="@string/help"
+        app:showAsAction="ifRoom" />
 </menu>

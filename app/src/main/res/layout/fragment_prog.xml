@@ -21,42 +21,26 @@
         <!-- TODO: Update blank fragment layout -->
 
         <TextView
-            android:id="@+id/programaTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/program_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/exekButton"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:text="@string/exek_title"
-            app:layout_constraintBottom_toTopOf="@+id/emaitzaTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
             android:id="@+id/emaitzaTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="@string/emaitza_title"
-            app:layout_constraintBottom_toTopOf="@+id/emaitzaView"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/emaitzaView"
+            app:layout_constraintTop_toTopOf="@+id/emaitzaView" />
 
         <TextView
             android:id="@+id/emaitzaView"
             android:layout_width="0dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/emaitzaTitle" />
 
         <EditText
             android:id="@+id/programText"
@@ -66,7 +50,7 @@
             android:gravity="left|top"
             android:inputType="textMultiLine"
             android:padding="10dp"
-            android:text="def main begin\n end def;"
+            android:text="def main begin\n\nend def;"
             app:layout_constraintBottom_toBottomOf="@+id/lineNumberView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/lineNumberView"
@@ -77,14 +61,15 @@
             android:layout_width="36dp"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:background="#eeeeee"
             android:gravity="center_horizontal"
             android:padding="10dp"
             android:text=""
             android:textSize="18dp"
-            app:layout_constraintBottom_toTopOf="@+id/exekButton"
+            app:layout_constraintBottom_toTopOf="@+id/emaitzaView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/programaTitle" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <android.inputmethodservice.KeyboardView

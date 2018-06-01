@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class MakroRun {
 
     public static String exekutatu(String progText, List<Character> alfabetoa, List<String> parametroak, List<Errorea> erroreak) {
         if (progText.trim().length() == 0) {
-            erroreak.add(new Errorea(new Posizioa(0, 0, 0, 0), "Programa hrtjhrtjrtjrtjrjrtjrtjtrjrjrtj hutsa da"));
+            erroreak.add(new Errorea(new Posizioa(0, 0, 0, 0), "Programa hutsa da"));
             return "";
         }
         CharStream input = CharStreams.fromString(progText);
@@ -36,38 +35,41 @@ public class MakroRun {
 
         TokenStream tokens = new CommonTokenStream(lexer);
         MakroprogramaParser parser = new MakroprogramaParser(tokens);
+        ANTLRErrorListener listener = new ANTLRErrorListener() {
+            // List<Whatever> errors;
+            @Override
+            public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
+                erroreak.add(new Errorea(new Posizioa(line, line, charPositionInLine, charPositionInLine), "Sintaxi errorea"));
+            }
+
+            @Override
+            public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact, BitSet ambigAlts, ATNConfigSet configs) {
+
+            }
+
+            @Override
+            public void reportAttemptingFullContext(Parser recognizer, DFA dfa, int startIndex, int stopIndex, BitSet conflictingAlts, ATNConfigSet configs) {
+
+            }
+
+            @Override
+            public void reportContextSensitivity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction, ATNConfigSet configs) {
+
+            }
+        };
+        parser.addErrorListener(listener);
+
+        if (parser.getNumberOfSyntaxErrors() > 0) {
+            return "";
+        }
+
         MakroprogramaParser.ProgContext prog = parser.prog();
 
         MyMakroVisitor visitor = new MyMakroVisitor();
         Programa programa = (Programa) visitor.visitProg(prog);
 
         if (parser.getNumberOfSyntaxErrors() > 0) {
-            // TODO: Make error listener, that saves errors in a List
-/*          ANTLRErrorListener listener = new ANTLRErrorListener() {
-                // List<Whatever> errors;
-                @Override
-                public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-
-                }
-
-                @Override
-                public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact, BitSet ambigAlts, ATNConfigSet configs) {
-
-                }
-
-                @Override
-                public void reportAttemptingFullContext(Parser recognizer, DFA dfa, int startIndex, int stopIndex, BitSet conflictingAlts, ATNConfigSet configs) {
-
-                }
-
-                @Override
-                public void reportContextSensitivity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction, ATNConfigSet configs) {
-
-                }
-            };
-            parser.addErrorListener(listener);
-*/
-        return "";
+            return "";
         }
 
         SinboloTaula st = new SinboloTaula(alfabetoa);

@@ -1,5 +1,6 @@
 package es.ehu.ehernandez035.kea.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,15 +21,16 @@ public class ErrorListAdapter extends RecyclerView.Adapter<ErrorListAdapter.View
         mValues = items;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.error_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.erroreMezua.setText(mValues.get(position).mezua);
         holder.lerroa.setText(holder.mView.getContext().getString(R.string.error_lerroa, mValues.get(position).p.hasLerro));
     }

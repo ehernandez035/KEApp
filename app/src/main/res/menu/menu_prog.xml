@@ -2,9 +2,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="es.ehu.ehernandez035.kea.activities.ProgActivity">
+
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:id="@+id/prog_execute_run"
+        android:icon="@drawable/actionbar_play"
+        android:title="@string/exek_title"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/prog_execute_clear"
+        android:icon="@drawable/delete"
+        android:title="@string/clear"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/prog_execute_save"
+        android:icon="@drawable/ic_save_white_24dp"
+        android:title="@string/save"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/prog_execute_load"
+        android:icon="@drawable/ic_file_upload_white_24dp"
+        android:title="@string/load"
+        app:showAsAction="ifRoom" />
 </menu>
