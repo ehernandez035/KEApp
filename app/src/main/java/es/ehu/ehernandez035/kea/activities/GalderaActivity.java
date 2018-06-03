@@ -12,9 +12,11 @@ import android.media.Image;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -63,18 +65,23 @@ public class GalderaActivity extends AppCompatActivity {
     private ArrayList<String> erantzunak;
     private int[] aukeratutakoPosizioak;
 
-    private static final int OP1_ID = 1000;//first radio button id
-    private static final int OP2_ID = 1001;//second radio button id
-    private static final int OP3_ID = 1002;//third radio button id
-    private static final int OP4_ID = 1003;//third radio button id
-
     private int position = 0;
-    private RadioButton zuzena;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_galdera);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         galdera = findViewById(R.id.galderaTV);
         op1 = findViewById(R.id.galdera_op1);

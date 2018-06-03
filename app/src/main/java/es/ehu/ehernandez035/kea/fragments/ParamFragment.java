@@ -98,7 +98,6 @@ public class ParamFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 adapter.addNewItem();
-
             }
         });
 

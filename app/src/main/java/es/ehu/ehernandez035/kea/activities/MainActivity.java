@@ -110,7 +110,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, GaldetegiZerrendaActivity.class);
-                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
         });
@@ -120,28 +119,28 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 // TODO Popup
-//                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
-//                mBuilder.setTitle(R.string.programaMota);
-//                mBuilder.setPositiveButton(R.string.while_radio_button, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
+                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+                mBuilder.setTitle(R.string.programaMota);
+                mBuilder.setNegativeButton(R.string.while_program, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent(MainActivity.this, ProgActivity.class);
                         intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        // TODO Send parameters in the intent
+                        intent.putExtra("makro", false);
                         startActivity(intent);
-//                    }
-//                });
-//                mBuilder.setNeutralButton(R.string.makro_radio_button, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        Intent intent = new Intent(MainActivity.this, ProgActivity.class);
-//                        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-//                        // TODO Send parameters in the intent
-//                        startActivity(intent);
-//                    }
-//                });
-//                final AlertDialog alertDialog = mBuilder.create();
-//                alertDialog.show();
+                    }
+                });
+                mBuilder.setPositiveButton(R.string.makro_program, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(MainActivity.this, ProgActivity.class);
+                        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        intent.putExtra("makro", true);
+                        startActivity(intent);
+                    }
+                });
+                final AlertDialog alertDialog = mBuilder.create();
+                alertDialog.show();
 
             }
         });
@@ -173,7 +172,9 @@ public class MainActivity extends AppCompatActivity
                 public void onSuccess(Response response) throws IOException {
                     SharedPrefManager.getInstance(MainActivity.this).logout();
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+                    finish();
                 }
             }).execute();
         } else if (id == R.id.profile) {

@@ -1,15 +1,10 @@
 package es.ehu.ehernandez035.kea.activities;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.widget.LinearLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -25,9 +20,6 @@ import es.ehu.ehernandez035.kea.R;
 import es.ehu.ehernandez035.kea.RequestCallback;
 import es.ehu.ehernandez035.kea.ServerRequest;
 import es.ehu.ehernandez035.kea.adapters.GaldetegiZerrendaAdapter;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class GaldetegiZerrendaActivity extends AppCompatActivity {
@@ -88,7 +80,7 @@ public class GaldetegiZerrendaActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-            mRecyclerView.setAdapter(new GaldetegiZerrendaAdapter(new ArrayList<Quizz>(), GaldetegiZerrendaActivity.this));
+        mRecyclerView.setAdapter(new GaldetegiZerrendaAdapter(new ArrayList<Quizz>(), GaldetegiZerrendaActivity.this));
 
     }
 

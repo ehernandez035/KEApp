@@ -1,6 +1,7 @@
 package es.ehu.ehernandez035.kea.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,13 +25,18 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.ehu.ehernandez035.kea.MakroRun;
 import es.ehu.ehernandez035.kea.R;
+import es.ehu.ehernandez035.kea.RunPrograma;
 import es.ehu.ehernandez035.kea.activities.ProgActivity;
 import es.ehu.ehernandez035.kea.adapters.ErrorListAdapter;
 import es.ehu.ehernandez035.kea.adapters.ProgListAdapter;
@@ -39,11 +45,25 @@ import es.ehu.ikasle.ehernandez035.makroprograma.SZA.Errorea;
 
 public class ProgFragment extends Fragment implements View.OnClickListener {
 
+    private static final String DEFAULT_MACRO_PROGRAM = "def main begin\n    \nend def;";
+    private static final String DEFAULT_WHILE_PROGRAM = "X0 := cons_a(X1);\n";
     private TextView lineNumbers;
     private EditText programText;
     private HorizontalScrollView horizontalScrollView;
     private Menu menu;
     private Thread execThread;
+    private AlertDialog loadDialog = null;
+    private boolean isMakro = true;
+
+    public ProgFragment() {
+
+    }
+
+    public static ProgFragment getInstance(boolean makro) {
+        ProgFragment f = new ProgFragment();
+        f.setMakro(makro);
+        return f;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,8 +105,8 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.prog_execute_clear:
-                programText.setText("def main begin\n    \nend def;");
-                programText.setSelection(19);
+                programText.setText(isMakro ? DEFAULT_MACRO_PROGRAM : DEFAULT_WHILE_PROGRAM);
+                programText.setSelection(isMakro ? 19 : 18);
                 return true;
             case R.id.prog_execute_load:
                 loadProgram();
@@ -100,7 +120,22 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
     }
 
     private void saveProgram() {
-
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        alert.setTitle(R.string.save_program);
+        alert.setMessage(R.string.choose_program_name);
+        EditText progIzenaET = new EditText(getActivity());
+        alert.setView(progIzenaET);
+        alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                new SavedProgram(ProgFragment.this, progIzenaET.getText().toString(), programText.getText().toString(), false).execute();
+            }
+        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).show();
     }
 
     private void loadProgram() {
@@ -108,18 +143,7 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
     }
 
     private boolean geldituPrograma(MenuItem item) {
-        if (execThread != null) {
-//            execThread.stop();
-            Snackbar.make(programText, "Oraingoz ezin da programa gelditu, itxi aplikazioa gelditzeko.", Snackbar.LENGTH_LONG).show();
-//            try {
-//                execThread.join();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-            execThread = null;
-        }
-
-        this.menu.getItem(0).setOnMenuItemClickListener(this::programaExekutatu);
+        new StopProgram(execThread, this.menu.getItem(0), programText, this).execute();
         return true;
     }
 
@@ -138,7 +162,13 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
             public void run() {
                 final List<Errorea> erroreak = new ArrayList<>();
 
-                final String emaitza = MakroRun.exekutatu(programa, alfabetoa, parametroak, erroreak);
+                String emaitza;
+                if (isMakro) {
+                    emaitza = RunPrograma.exekutatuMakro(programa, alfabetoa, parametroak, erroreak);
+                } else {
+                    emaitza = RunPrograma.exekutatuWhile(programa, alfabetoa, parametroak, erroreak);
+                }
+
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -186,6 +216,8 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
         horizontalScrollView = (HorizontalScrollView) getActivity().findViewById(R.id.keyboardScrollView);
         horizontalScrollView.setVisibility(View.GONE);
 
+        programText.setText(isMakro ? DEFAULT_MACRO_PROGRAM : DEFAULT_WHILE_PROGRAM);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             programText.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                 @Override
@@ -195,7 +227,7 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
             });
         }
 
-        programText.setImeActionLabel("Custom text", KeyEvent.KEYCODE_ENTER);
+//        programText.setImeActionLabel("Custom text", KeyEvent.KEYCODE_ENTER);
 
         programText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -280,6 +312,77 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    public void setMakro(boolean makro) {
+        isMakro = makro;
+    }
+
+    static class SavedProgram extends AsyncTask<Void, Void, Boolean> {
+
+        private final WeakReference<ProgFragment> context;
+        private final String izena;
+        private final String programa;
+        private final boolean overwrite;
+
+        SavedProgram(ProgFragment context, String izena, String programa, boolean overwrite) {
+            this.context = new WeakReference<>(context);
+            this.izena = izena;
+            this.programa = programa;
+            this.overwrite = overwrite;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            ProgFragment fragment = this.context.get();
+            if (fragment != null) {
+                Context context = fragment.getContext();
+                if (context != null) {
+
+
+                    File dir = context.getDir("programs", Context.MODE_PRIVATE);
+                    File newProg = new File(dir, izena);
+                    if (newProg.exists() && !overwrite) {
+                        return false;
+                    } else {
+                        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(newProg)))) {
+                            writer.write(programa);
+                            return true;
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (success) return;
+            ProgFragment fragment = this.context.get();
+            if (fragment != null) {
+                Context context = fragment.getContext();
+                if (context != null) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle(R.string.program_already_exists);
+                    builder.setMessage(R.string.overwrite_program);
+                    builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            new SavedProgram(fragment, izena, programa, true).execute();
+                        }
+                    }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    }).show();
+                }
+            }
+        }
+    }
+
     static class GetSavedProgramList extends AsyncTask<Void, Void, List<String>> {
 
         private final WeakReference<ProgFragment> context;
@@ -318,7 +421,13 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
 
                     rv.setLayoutManager(new LinearLayoutManager(context));
                     builder.setView(rv);
-                    builder.show();
+                    builder.setNeutralButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    fragment.loadDialog = builder.show();
                     rv.setAdapter(new ProgListAdapter(fragment, paths));
                 }
             }
@@ -327,5 +436,62 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
 
     public void setProgramText(String program) {
         this.programText.setText(program);
+        if (loadDialog != null) {
+            loadDialog.dismiss();
+            loadDialog = null;
+        }
+    }
+
+    private class StopProgram extends AsyncTask<Void, Void, Void> {
+
+        private final Thread toStop;
+        private final WeakReference<MenuItem> item;
+        private final WeakReference<View> snackbarHolder;
+        private final WeakReference<ProgFragment> fragment;
+
+        StopProgram(Thread toStop, MenuItem item, View snackbarHolder, ProgFragment fragment) {
+            this.toStop = toStop;
+            this.item = new WeakReference<>(item);
+            this.snackbarHolder = new WeakReference<>(snackbarHolder);
+            this.fragment = new WeakReference<>(fragment);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            View view = snackbarHolder.get();
+            MenuItem item = this.item.get();
+            if (item != null) item.setEnabled(false);
+            if (view != null) Snackbar.make(view, "Gelditzen", Snackbar.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (execThread != null) {
+                execThread.interrupt();
+                try {
+                    execThread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            View view = snackbarHolder.get();
+            MenuItem item = this.item.get();
+            if (item != null) {
+                item.setEnabled(true);
+                ProgFragment fragment = this.fragment.get();
+                if (fragment != null) {
+                    item.setOnMenuItemClickListener(fragment::programaExekutatu);
+                    fragment.execThread = null;
+                }
+                menu.getItem(0).setIcon(android.R.drawable.ic_media_play);
+            }
+            if (view != null) Snackbar.make(view, "Gelditu da", Snackbar.LENGTH_LONG).show();
+
+        }
     }
 }

@@ -9,23 +9,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import es.ehu.ehernandez035.kea.R;
 import es.ehu.ehernandez035.kea.fragments.ParamFragment;
 import es.ehu.ehernandez035.kea.fragments.ProgFragment;
-import es.ehu.ehernandez035.kea.R;
 
 public class ProgActivity extends AppCompatActivity implements ParamFragment.ParamChangedListener {
     /**
@@ -51,6 +42,9 @@ public class ProgActivity extends AppCompatActivity implements ParamFragment.Par
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prog);
 
+        Intent intent = getIntent();
+        this.makro = intent.getBooleanExtra("makro", true);
+
         /*Bundle extras = getIntent().getExtras();
         if (extras != null) {
             makro = extras.getBoolean("makro");
@@ -59,6 +53,7 @@ public class ProgActivity extends AppCompatActivity implements ParamFragment.Par
         }*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -128,7 +123,7 @@ public class ProgActivity extends AppCompatActivity implements ParamFragment.Par
                     f = new ParamFragment();
                     break;
                 case 1:
-                    f = new ProgFragment();
+                    f = ProgFragment.getInstance(makro);
                     break;
             }
             return f;

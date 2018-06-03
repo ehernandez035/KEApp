@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/while_radio_button"
+            android:text="@string/while_program"
             android:textSize="18sp"
             android:layout_margin="8dp"/>
 
@@ -41,7 +41,7 @@
             android:id="@+id/MPradioButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/makro_radio_button"
+            android:text="@string/makro_program"
             android:textSize="18sp"
             android:layout_margin="8dp"/>
     </RadioGroup>

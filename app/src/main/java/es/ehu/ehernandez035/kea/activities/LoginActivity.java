@@ -53,6 +53,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         // Set up the login form.
         usernameET = (EditText) findViewById(R.id.usernameET);
 
@@ -132,7 +134,9 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("username", username);
                         intent.putExtra("level", level);
                         intent.putExtra("points", points);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
+                        finish();
                     }
                 } catch (JSONException e) {
                     Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();

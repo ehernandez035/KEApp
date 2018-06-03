@@ -85,14 +85,13 @@
     <string name="title_param">Parametroak</string>
     <string name="title_prog">Programa</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="action_settings">Konfigurazioa</string>
     <string name="title_activity_prog">Programak</string>
     <string name="program_title" translatable="false">Programa:</string>
     <string name="emaitza_title">Emaitza:</string>
     <string name="exek_title">Exekutatu</string>
-    <string name="makro_radio_button" translatable="false">Makro-programa</string>
-    <string name="while_radio_button" translatable="false">While-programa</string>
+    <string name="makro_program" translatable="false">Makro-programa</string>
+    <string name="while_program" translatable="false">While-programa</string>
     <string name="AlfabetoaTitle">Alfabetoa:</string>
     <string name="letter_not_in_alphabet">Letraren bat ez dago alfabetoan</string>
     <string name="errorTitle">Errorea</string>
@@ -205,7 +204,13 @@
     <string name="delete_account_dialog_title">Kontua ezabatu</string>
     <string name="delete_account_dialog_message">Ziur al zaude kontua ezabatu nahi duzula?</string>
     <string name="delete_account_success">Kontua ezabatu egin da!</string>
-    <string name="prog_load_dialog_title">Programen list</string>
+    <string name="prog_load_dialog_title">Programa bat kargatu</string>
     <string name="error_happened">Errore bat gertatu da</string>
+    <string name="program_deleted">Programa ezabatu da</string>
+    <string name="program_could_not_be_deleted">Programa ezin izan da ezabatu</string>
+    <string name="save_program">Programa gorde</string>
+    <string name="choose_program_name">Programaren izena aukeratu</string>
+    <string name="program_already_exists">Programa existitzen da</string>
+    <string name="overwrite_program">Gainean idatzi nahi al duzu?</string>
 
 </resources>
