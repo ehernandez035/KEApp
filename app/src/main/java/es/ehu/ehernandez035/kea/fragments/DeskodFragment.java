@@ -43,9 +43,8 @@ public class DeskodFragment extends Fragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_help:
-                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                View view = getActivity().getLayoutInflater().inflate(R.layout.help_deskod, null);
-                alert.setView(view);
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setView(R.layout.help_deskod);
                 alert.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

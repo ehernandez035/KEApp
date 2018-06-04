@@ -184,8 +184,8 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
                             Button closeButton = (Button) mView.findViewById(R.id.closeError);
                             RecyclerView list = mView.findViewById(R.id.error_list);
 
-                            list.setAdapter(new ErrorListAdapter(erroreak));
                             list.setLayoutManager(new LinearLayoutManager(mView.getContext()));
+                            list.setAdapter(new ErrorListAdapter(erroreak));
 
 
                             mBuilder.setView(mView);

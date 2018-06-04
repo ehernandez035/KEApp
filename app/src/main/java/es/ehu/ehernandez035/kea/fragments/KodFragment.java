@@ -47,8 +47,7 @@ public class KodFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_help:
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                View view = getActivity().getLayoutInflater().inflate(R.layout.help_kod, null);
-                alert.setView(view);
+                alert.setView(R.layout.help_kod);
                 alert.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

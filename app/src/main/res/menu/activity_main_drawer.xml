@@ -17,10 +17,7 @@
             android:id="@+id/profile"
             android:icon="@drawable/ic_person_black_24dp"
             android:title="Profila" />
-        <item
-            android:id="@+id/config"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Konfigurazioa" />
+
     </group>
 
 </menu>
