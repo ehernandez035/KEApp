@@ -86,9 +86,12 @@ public class RunPrograma {
         CharStream input = CharStreams.fromString(progText);
         MakroprogramaLexer lexer = new MakroprogramaLexer(input);
 
+        MyErrorListener listener = new MyErrorListener(erroreak);
+        lexer.addErrorListener(listener);
+
         TokenStream tokens = new CommonTokenStream(lexer);
         MakroprogramaParser parser = new MakroprogramaParser(tokens);
-        parser.addErrorListener(new MyErrorListener(erroreak));
+        parser.addErrorListener(listener);
 
         if (parser.getNumberOfSyntaxErrors() > 0) {
             return "";
@@ -96,10 +99,14 @@ public class RunPrograma {
 
         MakroprogramaParser.ProgContext prog = parser.prog();
 
+        if (!erroreak.isEmpty()) {
+            return "";
+        }
+
         MyMakroVisitor visitor = new MyMakroVisitor();
         Programa programa = (Programa) visitor.visitProg(prog);
 
-        if (parser.getNumberOfSyntaxErrors() > 0) {
+        if (!erroreak.isEmpty()) {
             return "";
         }
 

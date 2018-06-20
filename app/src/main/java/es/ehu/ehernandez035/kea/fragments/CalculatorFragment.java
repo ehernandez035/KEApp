@@ -208,10 +208,10 @@ public class CalculatorFragment extends Fragment {
                         hitzModuan = sarrera;
                         break;
                     case Pila:
-                        hitzModuan = Utils.pilatikHitzera(alfLista, Arrays.asList(sarrera.split(",")));
+                        hitzModuan = Utils.pilatikHitzera(alfLista, Arrays.asList(sarrera.replaceAll("[<\\]()]", "").split(",")));
                         break;
                     case Bektore:
-                        hitzModuan = Utils.bektoretikHitzera(alfLista, Arrays.asList(sarrera.split(",")));
+                        hitzModuan = Utils.bektoretikHitzera(alfLista, Arrays.asList(sarrera.replaceAll("[<\\]()]", "").split(",")));
                         break;
                     case Zenbaki:
                         hitzModuan = Utils.zenbakiaHitzera(alfLista, new BigInteger(sarrera));

@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -164,10 +165,16 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
                 final List<Errorea> erroreak = new ArrayList<>();
 
                 String emaitza;
-                if (isMakro) {
-                    emaitza = RunPrograma.exekutatuMakro(programa, alfabetoa, parametroak, erroreak);
-                } else {
-                    emaitza = RunPrograma.exekutatuWhile(programa, alfabetoa, parametroak, erroreak);
+                try {
+                    if (isMakro) {
+                        emaitza = RunPrograma.exekutatuMakro(programa, alfabetoa, parametroak, erroreak);
+                    } else {
+                        emaitza = RunPrograma.exekutatuWhile(programa, alfabetoa, parametroak, erroreak);
+                    }
+                } catch (Exception e) {
+                    Log.e("KEApp", "Error executing program", e);
+                    Snackbar.make(programaText, R.string.error_happened, Snackbar.LENGTH_LONG).show();
+                    return;
                 }
 
 
