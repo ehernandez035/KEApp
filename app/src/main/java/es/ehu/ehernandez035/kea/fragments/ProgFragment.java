@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -181,7 +182,7 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
                         } else {
                             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
                             View mView = getActivity().getLayoutInflater().inflate(R.layout.error_alert, null);
-                            Button closeButton = (Button) mView.findViewById(R.id.closeError);
+                            Button closeButton = mView.findViewById(R.id.closeError);
                             RecyclerView list = mView.findViewById(R.id.error_list);
 
                             list.setLayoutManager(new LinearLayoutManager(mView.getContext()));
@@ -208,12 +209,12 @@ public class ProgFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        lineNumbers = (TextView) getActivity().findViewById(R.id.lineNumberView);
-        programText = (EditText) getActivity().findViewById(R.id.programText);
-        horizontalScrollView = (HorizontalScrollView) getActivity().findViewById(R.id.keyboardScrollView);
+        lineNumbers = getActivity().findViewById(R.id.lineNumberView);
+        programText = getActivity().findViewById(R.id.programText);
+        horizontalScrollView = getActivity().findViewById(R.id.keyboardScrollView);
         horizontalScrollView.setVisibility(View.GONE);
 
         programText.setText(isMakro ? DEFAULT_MACRO_PROGRAM : DEFAULT_WHILE_PROGRAM);

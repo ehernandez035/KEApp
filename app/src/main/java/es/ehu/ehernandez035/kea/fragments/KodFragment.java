@@ -2,6 +2,7 @@ package es.ehu.ehernandez035.kea.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -67,14 +68,14 @@ public class KodFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_kod, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final RecyclerView recyclerView = this.getActivity().findViewById(R.id.kod_valRV);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -88,7 +89,7 @@ public class KodFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String kopStr = kopET.getText().toString();
-                if(kopStr.isEmpty()){
+                if (kopStr.isEmpty()) {
                     kopET.setError(getString(R.string.konbertsorea_zenbakia));
                 }
                 try {
@@ -119,7 +120,7 @@ public class KodFragment extends Fragment {
                     }
                 }
 
-                if(balioak.isEmpty()) {
+                if (balioak.isEmpty()) {
                     Log.d("GAL", "Empty list");
                     return;
                 }
@@ -129,7 +130,7 @@ public class KodFragment extends Fragment {
                 input.setInputType(InputType.TYPE_CLASS_NUMBER);
                 builder.setMessage(R.string.esperotakoBalioa)
                         .setTitle(R.string.question_ask_result)
-                .setView(input);
+                        .setView(input);
                 BigInteger emaitza = Utils.kod(balioak);
                 builder.setPositiveButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {

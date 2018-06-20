@@ -10,7 +10,6 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="title_activity_settings">Konfigurazioa</string>
 
 
     <!-- Example General settings -->
@@ -57,20 +56,6 @@
         <item>-1</item>
     </string-array>
 
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
     <!-- Example settings for Notifications -->
@@ -86,32 +71,25 @@
     <string name="title_prog">Programa</string>
 
     <string name="action_settings">Konfigurazioa</string>
-    <string name="title_activity_prog">Programak</string>
-    <string name="program_title" translatable="false">Programa:</string>
     <string name="emaitza_title">Emaitza:</string>
     <string name="exek_title">Exekutatu</string>
     <string name="makro_program" translatable="false">Makro-programa</string>
     <string name="while_program" translatable="false">While-programa</string>
     <string name="AlfabetoaTitle">Alfabetoa:</string>
     <string name="letter_not_in_alphabet">Letraren bat ez dago alfabetoan</string>
-    <string name="errorTitle">Errorea</string>
     <string name="closeError">Irten</string>
     <string name="splashText">Kargatzen…</string>
-    <string name="calculatorView">Konbertsorea</string>
     <string name="sarreraTV">Sarrera balioak:</string>
     <string name="bihurketaTV">Bihurketa:</string>
     <string name="bihurketaButton">Bihurtu!</string>
     <string name="lerroaTV">0 lerroa:</string>
     <string name="erroreMezuaTV">Errorea</string>
     <string name="sarreraMotaTV">Sarrera mota:</string>
-    <string name="converter">Konbertsorea</string>
-    <string name="gelditu_text">Gelditu</string>
     <string name="error_lerroa">%1$d. lerroa</string>
 
     <string name="hitza">Hitza</string>
     <string name="pila" translatable="false">Pila</string>
     <string name="bektore">Bektore</string>
-    <string name="hitz_lista">Hitz lista</string>
     <string name="zenbaki">Zenbakia</string>
     <string name="loginTittle">Erregistratu zaitez</string>
     <string name="usernameTV">Erabiltzaile izena (izen hau publikoki erakutsiko da):</string>
@@ -120,10 +98,7 @@
     <string name="passwordConfTV">Pasahitza errepikatu:</string>
     <string name="registerButton">Bidali</string>
     <string name="error_confirmation_password">Sartutako pasahitza ez da aurrekoaren berdina</string>
-    <string name="title_activity_login">Saioa hasi</string>
-    <string name="password_value">Pasahitza</string>
     <string name="password">Pasahitza:</string>
-    <string name="title_activity_ranking">RankingActivity</string>
     <string name="connection_error">Errorea konexioan</string>
     <string name="error_email_taken">Email-a aurretik erabili da</string>
     <string name="error_username_taken">Erabiltzailea hartuta dago</string>
@@ -141,19 +116,13 @@
     <string name="konbertsorea">Konbertsorea</string>
     <string name="programatu">Programak idatzi</string>
     <string name="programaMota">Programa mota aukeratu</string>
-    <string name="hasi">Hasi!</string>
-    <string name="title_activity_galdetegi_zerrenda">GaldetegiZerrenda</string>
     <string name="galdetegiZerrenda">Galdetegi zerrenda</string>
     <string name="galdetegi_izenburua">%1$d. Galdetegia</string>
     <string name="session_expired">Saioa iraungi da. Sartu berriro.</string>
     <string name="error_out_of_alphabet">Sarrerak alfabetoaren kanpoko karaktereak ditu</string>
     <string name="total_points">Puntuak</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
     <string name="result_dialog_title">Asmatutako galdera kopurua</string>
     <string name="ranking_yourposition">Zure posizioa ranking-ean:</string>
-    <string name="title_activity_kod_dekod">KodDekodActivity</string>
     <string name="kod">Kodeketa</string>
     <string name="deskod">Deskodeketa</string>
     <string name="kod_string">Elementu kopurua:</string>
@@ -171,9 +140,7 @@
     <string name="konbertsorea_zenbaki_errorea">Sarrerako balioa zenbakia izan behar du</string>
     <string name="registerTerminoak">Bai, %1$s Pribatutasun politika %2$s onartzen dut</string>
     <string name="terminoakOnartu">Terminoak eta baldintzak onartu behar dira</string>
-    <string name="profile_emailaAldatu">Emaila aldatu:</string>
     <string name="save">Gorde</string>
-    <string name="old_password">Aurreko pasahitza idatzi:</string>
     <string name="profile">Profila</string>
     <string name="username_changed">Erabiltzaile izena aldatu da</string>
     <string name="username_taken">Erabiltzailea hartuta dago</string>
@@ -212,5 +179,10 @@
     <string name="choose_program_name">Programaren izena aukeratu</string>
     <string name="program_already_exists">Programa existitzen da</string>
     <string name="overwrite_program">Gainean idatzi nahi al duzu?</string>
+    <string name="logout">Saioa itxi</string>
+    <string name="error_list">Errore lista</string>
+    <string name="ranking_description">Ikusi zein den zure posizioa ranking-ean</string>
+    <string name="program_description">While-programak exekutatzeko ingurunea</string>
+    <string name="quizzes_description">Galdetegiak bete puntuak lortzeko</string>
 
 </resources>

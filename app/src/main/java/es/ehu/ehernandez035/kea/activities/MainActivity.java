@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
-        // TODO Get user info
-
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -118,7 +116,6 @@ public class MainActivity extends AppCompatActivity
         progLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO Popup
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
                 mBuilder.setTitle(R.string.programaMota);
                 mBuilder.setNegativeButton(R.string.while_program, new DialogInterface.OnClickListener() {
@@ -169,7 +166,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.logout) {
             new ServerRequest(this, "http://elenah.duckdns.org/logout.php", new RequestCallback() {
                 @Override
-                public void onSuccess(Response response) throws IOException {
+                public void onSuccess(Response response) {
                     SharedPrefManager.getInstance(MainActivity.this).logout();
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

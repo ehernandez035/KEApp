@@ -1,7 +1,6 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:context="es.ehu.ehernandez035.kea.fragments.ProgFragment">
 
-        <!-- TODO: Update blank fragment layout -->
+
 
         <TextView
             android:id="@+id/emaitzaTitle"
@@ -47,7 +46,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:ems="10"
-            android:gravity="left|top"
+            android:gravity="start|top"
             android:inputType="textMultiLine"
             android:padding="10dp"
             android:text="def main begin\n\nend def;"
@@ -73,7 +72,6 @@
 
 
         <android.inputmethodservice.KeyboardView
-            android:id="@+id/keyboardview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:focusable="true"
@@ -92,7 +90,6 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
-            android:id="@+id/directchild"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

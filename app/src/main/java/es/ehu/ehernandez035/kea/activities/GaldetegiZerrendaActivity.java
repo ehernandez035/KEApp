@@ -1,6 +1,7 @@
 package es.ehu.ehernandez035.kea.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -47,7 +48,7 @@ public class GaldetegiZerrendaActivity extends AppCompatActivity {
                         JSONObject jObject = new JSONObject(result);
                         int status = jObject.getInt("status");
                         if (status == 0) {
-                            // TODO Error
+                            Snackbar.make(findViewById(R.id.galdetegia_correctAnswer), R.string.connection_error, Snackbar.LENGTH_SHORT).show();
                         } else {
                             JSONArray data = jObject.getJSONArray("quizzes");
 
@@ -72,7 +73,7 @@ public class GaldetegiZerrendaActivity extends AppCompatActivity {
         }).execute();
 
         setContentView(R.layout.activity_galdetegi_zerrenda);
-        mRecyclerView = (RecyclerView) findViewById(R.id.galdetegiZerrenda_rv);
+        mRecyclerView = findViewById(R.id.galdetegiZerrenda_rv);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -80,7 +81,7 @@ public class GaldetegiZerrendaActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        mRecyclerView.setAdapter(new GaldetegiZerrendaAdapter(new ArrayList<Quizz>(), GaldetegiZerrendaActivity.this));
+        mRecyclerView.setAdapter(new GaldetegiZerrendaAdapter(new ArrayList<>(), GaldetegiZerrendaActivity.this));
 
     }
 

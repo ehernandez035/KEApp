@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 

@@ -1,7 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="es.ehu.ehernandez035.kea.ExekActivity">
+    tools:context="es.ehu.ehernandez035.kea.ExekActivity"
+    tools:ignore="UnusedResources">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

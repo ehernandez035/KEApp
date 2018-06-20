@@ -56,9 +56,9 @@ public class LoginActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         // Set up the login form.
-        usernameET = (EditText) findViewById(R.id.usernameET);
+        usernameET = findViewById(R.id.usernameET);
 
-        passwordET = (EditText) findViewById(R.id.passwordET);
+        passwordET = findViewById(R.id.passwordET);
         passwordET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button loginButton = (Button) findViewById(R.id.loginButton);
+        Button loginButton = findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,12 +100,16 @@ public class LoginActivity extends AppCompatActivity {
                     mAuthTask = null;
                     String result = response.body().string();
 
-                    if ("0".equals(result)) {
-                        get_user_info();
-                    } else if ("3".equals(result)) {
-                        Snackbar.make(mLoginFormView, R.string.session_expired, Snackbar.LENGTH_LONG).show();
-                    } else {
-                        Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
+                    switch (result) {
+                        case "0":
+                            get_user_info();
+                            break;
+                        case "3":
+                            Snackbar.make(mLoginFormView, R.string.session_expired, Snackbar.LENGTH_LONG).show();
+                            break;
+                        default:
+                            Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
+                            break;
                     }
                 }
             }).setErrorListener(new Runnable() {
@@ -198,7 +202,7 @@ public class LoginActivity extends AppCompatActivity {
 
             mAuthTask = new ServerRequest(this, "http://elenah.duckdns.org/login.php", params, new RequestCallback() {
                 @Override
-                public void onSuccess(Response response) throws IOException {
+                public void onSuccess(Response response) {
                     mAuthTask = null;
                     showProgress(false);
                     if (response == null) {
@@ -242,12 +246,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 }
-            }).setErrorListener(new Runnable() {
-                @Override
-                public void run() {
-                    Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG).show();
-                }
-            }).withoutCookie();
+            }).setErrorListener(Snackbar.make(mLoginFormView, R.string.connection_error, Snackbar.LENGTH_LONG)::show).withoutCookie();
             mAuthTask.execute();
         }
     }
@@ -266,32 +265,25 @@ public class LoginActivity extends AppCompatActivity {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        });
 
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mProgressView.animate().setDuration(shortAnimTime).alpha(
+                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 }
 

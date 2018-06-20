@@ -15,12 +15,13 @@ import es.ehu.ehernandez035.kea.R;
 public class SplashActivity extends AppCompatActivity {
     private TextView tv;
     private ImageView iv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        tv = (TextView) findViewById(R.id.tv);
-        iv = (ImageView) findViewById(R.id.iv);
+        tv = findViewById(R.id.tv);
+        iv = findViewById(R.id.iv);
         //Animation splashAnimation = AnimationUtils.loadAnimation(this, R.anim.splash);
 
         //tv.startAnimation(splashAnimation);
@@ -45,7 +46,6 @@ public class SplashActivity extends AppCompatActivity {
         all.start();
 
 
-
         final Intent i = new Intent(this, LoginActivity.class);
         Thread timer = new Thread(new Runnable() {
             @Override
@@ -54,7 +54,7 @@ public class SplashActivity extends AppCompatActivity {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }finally{
+                } finally {
                     startActivity(i);
                 }
             }

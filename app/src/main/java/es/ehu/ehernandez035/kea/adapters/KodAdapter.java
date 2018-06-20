@@ -1,5 +1,6 @@
 package es.ehu.ehernandez035.kea.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -7,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,21 +21,22 @@ public class KodAdapter extends RecyclerView.Adapter<KodAdapter.ViewHolder> {
     public KodAdapter(int kop) {
         mValues = new ArrayList<>();
         invalid = new ArrayList<>();
-        for (int i=0;i<kop;i++){
+        for (int i = 0; i < kop; i++) {
             mValues.add("");
             invalid.add(false);
         }
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.kod_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.kodHitza.setText(mValues.get(position));
 
         if (holder.watcher != null) holder.kodHitza.removeTextChangedListener(holder.watcher);

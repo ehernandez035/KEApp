@@ -1,10 +1,10 @@
 package es.ehu.ehernandez035.kea.adapters;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +32,9 @@ public class ParamListAdapter extends RecyclerView.Adapter<ParamListAdapter.View
         alfabetoa = new ArrayList<>();
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.variable_item, parent, false);
         return new ViewHolder(view);
@@ -41,7 +42,7 @@ public class ParamListAdapter extends RecyclerView.Adapter<ParamListAdapter.View
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         if (holder.watcher != null) holder.varValue.removeTextChangedListener(holder.watcher);
         final TextWatcher newWatcher = new TextWatcher() {
             @Override
@@ -58,8 +59,8 @@ public class ParamListAdapter extends RecyclerView.Adapter<ParamListAdapter.View
             public void afterTextChanged(Editable editable) {
                 if (position < mValues.size()) {
                     final String newValue = holder.varValue.getText().toString();
-                    if (!mValues.get(position).equals(newValue)) {
-                        mValues.set(position, newValue);
+                    if (!mValues.get(holder.getAdapterPosition()).equals(newValue)) {
+                        mValues.set(holder.getAdapterPosition(), newValue);
                         paramFragment.onParamsChanged(mValues);
                         holder.mView.post(new Runnable() {
                             @Override
@@ -113,10 +114,10 @@ public class ParamListAdapter extends RecyclerView.Adapter<ParamListAdapter.View
             @Override
             public void onClick(View view) {
                 holder.removeButton.setOnClickListener(null);
-                mValues.remove(position);
+                mValues.remove(holder.getAdapterPosition());
                 holder.varValue.removeTextChangedListener(newWatcher);
-                ParamListAdapter.this.notifyItemRemoved(position);
-                ParamListAdapter.this.notifyItemRangeChanged(position, mValues.size());
+                ParamListAdapter.this.notifyItemRemoved(holder.getAdapterPosition());
+                ParamListAdapter.this.notifyItemRangeChanged(holder.getAdapterPosition(), mValues.size());
             }
         });
     }

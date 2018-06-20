@@ -3,12 +3,8 @@ package es.ehu.ehernandez035.kea.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
@@ -25,8 +21,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.koushikdutta.async.future.ConvertFuture;
-import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.plattysoft.leonids.ParticleSystem;
@@ -109,7 +103,7 @@ public class GalderaActivity extends AppCompatActivity {
                             JSONObject jObject = new JSONObject(result);
                             int status = jObject.getInt("status");
                             if (status == 0) {
-                                // TODO Error
+                                Snackbar.make(findViewById(R.id.galderaLayout), R.string.connection_error, Snackbar.LENGTH_SHORT).show();
                             } else {
                                 final JSONArray data = jObject.getJSONArray("questions");
                                 galderak = new ArrayList<>(data.length());
@@ -128,7 +122,7 @@ public class GalderaActivity extends AppCompatActivity {
 
                                     galderak.add(galderaBerria);
                                 }
-                                for (int i = 0; i<galderak.size(); i++) {
+                                for (int i = 0; i < galderak.size(); i++) {
                                     erantzunak.add("");
                                 }
 
@@ -287,7 +281,6 @@ public class GalderaActivity extends AppCompatActivity {
             @Override
             public void onCompleted(Exception e, Bitmap result) {
                 if (result == null) {
-                    Log.d("GAL", "Image was null");
                     return;
                 }
                 scaleImage(R.id.galdera_image_layout, R.id.imageView_galdera, result);
@@ -353,7 +346,7 @@ public class GalderaActivity extends AppCompatActivity {
 
     }
 
-    private void scaleImage(int parentId, int imageViewId, Bitmap bitmap) throws NoSuchElementException  {
+    private void scaleImage(int parentId, int imageViewId, Bitmap bitmap) throws NoSuchElementException {
         View parent = findViewById(parentId);
         ImageView view = findViewById(imageViewId);
         // Get bitmap from the the ImageView.
@@ -373,7 +366,6 @@ public class GalderaActivity extends AppCompatActivity {
         matrix.postScale(scale, scale);
 
 
-
         // Create a new bitmap and convert it to a format understood by the ImageView
         Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
         width = scaledBitmap.getWidth(); // re-use
@@ -389,7 +381,7 @@ public class GalderaActivity extends AppCompatActivity {
 
     private int dpToPx(int dp) {
         float density = getApplicationContext().getResources().getDisplayMetrics().density;
-        return Math.round((float)dp * density);
+        return Math.round((float) dp * density);
     }
 
 }

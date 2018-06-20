@@ -145,7 +145,8 @@
                 android:editable="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/emaitzaTV" />
+                app:layout_constraintTop_toBottomOf="@+id/emaitzaTV"
+                android:inputType="none" />
 
             <TextView
                 android:id="@+id/sarreraMotaTV"

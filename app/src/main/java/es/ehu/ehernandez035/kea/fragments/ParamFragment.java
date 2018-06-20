@@ -2,6 +2,7 @@ package es.ehu.ehernandez035.kea.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -18,8 +19,8 @@ import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.ehu.ehernandez035.kea.adapters.ParamListAdapter;
 import es.ehu.ehernandez035.kea.R;
+import es.ehu.ehernandez035.kea.adapters.ParamListAdapter;
 
 
 public class ParamFragment extends Fragment {
@@ -29,24 +30,15 @@ public class ParamFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_param, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = this.getActivity().findViewById(R.id.param_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -81,7 +73,7 @@ public class ParamFragment extends Fragment {
                 adapter.onAlphabetChanged(alfabetoa);
                 Log.d("KEA_GAL", "alfabetoaChanged param");
 
-                if(listener!=null){
+                if (listener != null) {
                     listener.onAlphabetChanged(alfabetoa);
                 }
             }
@@ -106,21 +98,22 @@ public class ParamFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof ParamChangedListener){
+        if (context instanceof ParamChangedListener) {
             listener = (ParamChangedListener) context;
             Log.d("KEA_GAL", "attached");
         }
     }
 
     public void onParamsChanged(List<String> mValues) {
-        if(listener!=null){
+        if (listener != null) {
             listener.onParamChanged(mValues);
             Log.d("KEA_GAL", "paramChanged param");
         }
     }
 
-    public interface ParamChangedListener{
+    public interface ParamChangedListener {
         void onAlphabetChanged(List<Character> alfabetoa);
+
         void onParamChanged(List<String> parametroak);
 
     }

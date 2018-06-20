@@ -4,7 +4,6 @@
     tools:context="es.ehu.ehernandez035.kea.activities.ProgActivity">
 
     <item
-        android:id="@+id/prog_execute_run"
         android:icon="@drawable/actionbar_play"
         android:title="@string/exek_title"
         app:showAsAction="ifRoom" />

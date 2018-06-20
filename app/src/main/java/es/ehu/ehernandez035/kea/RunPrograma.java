@@ -1,19 +1,14 @@
 package es.ehu.ehernandez035.kea;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.atn.ATNConfigSet;
-import org.antlr.v4.runtime.dfa.DFA;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Collections;
 import java.util.List;
 
 import es.ehu.ikasle.ehernandez035.gramatika.WhileLexer;
@@ -35,33 +30,16 @@ public class RunPrograma {
             erroreak.add(new Errorea(new Posizioa(0, 0, 0, 0), "Programa hutsa da"));
             return "";
         }
+
+        ANTLRErrorListener listener = new MyErrorListener(erroreak);
+
         CharStream input = CharStreams.fromString(progText);
         WhileLexer lexer = new WhileLexer(input);
 
+        lexer.addErrorListener(listener);
+
         TokenStream tokens = new CommonTokenStream(lexer);
         WhileParser parser = new WhileParser(tokens);
-        ANTLRErrorListener listener = new ANTLRErrorListener() {
-            // List<Whatever> errors;
-            @Override
-            public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-                erroreak.add(new Errorea(new Posizioa(line, line, charPositionInLine, charPositionInLine), "Sintaxi errorea"));
-            }
-
-            @Override
-            public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact, BitSet ambigAlts, ATNConfigSet configs) {
-
-            }
-
-            @Override
-            public void reportAttemptingFullContext(Parser recognizer, DFA dfa, int startIndex, int stopIndex, BitSet conflictingAlts, ATNConfigSet configs) {
-
-            }
-
-            @Override
-            public void reportContextSensitivity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction, ATNConfigSet configs) {
-
-            }
-        };
         parser.addErrorListener(listener);
 
         if (parser.getNumberOfSyntaxErrors() > 0) {
@@ -70,27 +48,33 @@ public class RunPrograma {
 
         WhileParser.ProgContext prog = parser.prog();
 
-        MyWhileVisitor visitor = new MyWhileVisitor();
-        es.ehu.ikasle.ehernandez035.whileprograma.Programa programa = (es.ehu.ikasle.ehernandez035.whileprograma.Programa) visitor.visitProg(prog);
-
-        if (parser.getNumberOfSyntaxErrors() > 0) {
+        if (!erroreak.isEmpty()) {
             return "";
         }
 
-        // TODO Implement verify
-//        programa.verify(st, erroreak);
+        MyWhileVisitor visitor = new MyWhileVisitor();
+        Programa programa = (Programa) visitor.visitProg(prog);
+
+        if (!erroreak.isEmpty()) {
+            return "";
+        }
+
+        SinboloTaula st = new SinboloTaula(alfabetoa);
+        for (int i = 0; i < parametroak.size(); i++) {
+            st.gordeAldagaia("X" + Integer.toString(i + 1), parametroak.get(i));
+        }
+
+        Liburutegia.gehituFuntzioak(st);
+
+        programa.verify(st, erroreak);
 
 
-//        programa.verifyAlf(st, erroreak);
-
-        List<String> parametroakKopia = new ArrayList<>();
-        parametroakKopia.add(""); // X0
-        parametroakKopia.addAll(parametroak);
+        programa.verifyAlf(st, erroreak);
 
         if (!erroreak.isEmpty()) {
             return "";
         } else {
-            return programa.execute(parametroakKopia);
+            return programa.execute(st);
         }
     }
 
@@ -104,29 +88,7 @@ public class RunPrograma {
 
         TokenStream tokens = new CommonTokenStream(lexer);
         MakroprogramaParser parser = new MakroprogramaParser(tokens);
-        ANTLRErrorListener listener = new ANTLRErrorListener() {
-            // List<Whatever> errors;
-            @Override
-            public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-                erroreak.add(new Errorea(new Posizioa(line, line, charPositionInLine, charPositionInLine), "Sintaxi errorea"));
-            }
-
-            @Override
-            public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact, BitSet ambigAlts, ATNConfigSet configs) {
-
-            }
-
-            @Override
-            public void reportAttemptingFullContext(Parser recognizer, DFA dfa, int startIndex, int stopIndex, BitSet conflictingAlts, ATNConfigSet configs) {
-
-            }
-
-            @Override
-            public void reportContextSensitivity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction, ATNConfigSet configs) {
-
-            }
-        };
-        parser.addErrorListener(listener);
+        parser.addErrorListener(new MyErrorListener(erroreak));
 
         if (parser.getNumberOfSyntaxErrors() > 0) {
             return "";
@@ -155,6 +117,19 @@ public class RunPrograma {
             return "";
         } else {
             return programa.execute(st);
+        }
+    }
+
+    static class MyErrorListener extends BaseErrorListener {
+        private final List<Errorea> erroreLista;
+
+        public MyErrorListener(List<Errorea> erroreLista) {
+            this.erroreLista = erroreLista;
+        }
+
+        @Override
+        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
+            erroreLista.add(new Errorea(new Posizioa(line, line, charPositionInLine, charPositionInLine), "Sintaxi errorea"));
         }
     }
 }

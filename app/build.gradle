@@ -6,10 +6,9 @@ android {
     defaultConfig {
         applicationId "es.ehu.ehernandez035.kea"
         minSdkVersion 15
-        targetSdkVersion 26
-        versionCode 5
+        targetSdkVersion 27
+        versionCode 8
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -45,7 +44,6 @@ dependencies {
     implementation 'com.android.support:design:27.1.0'
     implementation 'com.android.volley:volley:+'
     implementation 'com.squareup.okhttp3:okhttp:3.9.0'
-    testImplementation 'junit:junit:4.12'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'org.antlr:antlr4:4.7'
     implementation 'com.android.support:cardview-v7:27.1.0'

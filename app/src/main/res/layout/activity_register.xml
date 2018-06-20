@@ -27,7 +27,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/titleTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/loginTittle"
@@ -49,7 +48,6 @@
             android:inputType="textPersonName" />
 
         <TextView
-            android:id="@+id/emailTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/emailTV" />
@@ -62,7 +60,6 @@
             android:inputType="textEmailAddress" />
 
         <TextView
-            android:id="@+id/passwordTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/passwordTV" />
@@ -75,7 +72,6 @@
             android:inputType="textPassword" />
 
         <TextView
-            android:id="@+id/passwordConfTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/passwordConfTV" />
@@ -101,7 +97,6 @@
             android:text="@string/registerButton" />
 
         <TextView
-            android:id="@+id/messageTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/colorAccent" />

@@ -1,6 +1,7 @@
 package es.ehu.ehernandez035.kea.adapters;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,27 +21,28 @@ public class GaldetegiZerrendaAdapter extends RecyclerView.Adapter<GaldetegiZerr
     private List<Quizz> quizzes;
     private GaldetegiZerrendaActivity galdetegiZerrendaActivity;
 
-    public GaldetegiZerrendaAdapter(List<Quizz> items,  GaldetegiZerrendaActivity gza) {
+    public GaldetegiZerrendaAdapter(List<Quizz> items, GaldetegiZerrendaActivity gza) {
         quizzes = items;
         galdetegiZerrendaActivity = gza;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.galdetegia_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.tittle.setText(galdetegiZerrendaActivity.getString(R.string.galdetegi_izenburua, position+1));
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        holder.tittle.setText(galdetegiZerrendaActivity.getString(R.string.galdetegi_izenburua, position + 1));
         final Quizz quizz = quizzes.get(position);
         holder.description.setText(quizz.getDescription());
         if (quizz.getAmount() == 0) {
             holder.correctAnswers.setText("0 %");
         } else {
-            holder.correctAnswers.setText(Integer.toString((int) (quizz.getCorrectAnswers() / (float)quizz.getAmount() * 100)) + " %");
+            holder.correctAnswers.setText(Integer.toString((int) (quizz.getCorrectAnswers() / (float) quizz.getAmount() * 100)) + " %");
         }
 
 
