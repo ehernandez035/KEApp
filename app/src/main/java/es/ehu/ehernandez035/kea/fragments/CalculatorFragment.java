@@ -201,17 +201,16 @@ public class CalculatorFragment extends Fragment {
                     }
                 }
                 sarreraText.setError(null);
-
                 String hitzModuan = "";
                 switch (sarreraMota) {
                     case Hitza:
                         hitzModuan = sarrera;
                         break;
                     case Pila:
-                        hitzModuan = Utils.pilatikHitzera(alfLista, Arrays.asList(sarrera.replaceAll("[<\\]()]", "").split(",")));
+                        hitzModuan = Utils.pilatikHitzera(alfLista, Arrays.asList(sarrera.replaceAll("[<\\]()]", "").split(",", -1)));
                         break;
                     case Bektore:
-                        hitzModuan = Utils.bektoretikHitzera(alfLista, Arrays.asList(sarrera.replaceAll("[<\\]()]", "").split(",")));
+                        hitzModuan = Utils.bektoretikHitzera(alfLista, Arrays.asList(sarrera.replaceAll("[<\\]()]", "").split(",", -1)));
                         break;
                     case Zenbaki:
                         hitzModuan = Utils.zenbakiaHitzera(alfLista, new BigInteger(sarrera));

@@ -201,12 +201,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     public static boolean isEmailValid(String email) {
         String emailRegex = "[A-Z0-9a-z._%+\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,64}";
-        return !(TextUtils.isEmpty(email) && Pattern.matches(emailRegex, email));
+        return !TextUtils.isEmpty(email) && Pattern.matches(emailRegex, email);
     }
 
     public static boolean isPasswordValid(String password) {
         String passwordRegex = "[A-Z0-9a-z._%+\\-]{6,}";
-        return !(TextUtils.isEmpty(password) && Pattern.matches(passwordRegex, password));
+        return !TextUtils.isEmpty(password) && Pattern.matches(passwordRegex, password);
     }
 
     public class UserLoginTask extends AsyncTask<Void, Void, Integer> {
