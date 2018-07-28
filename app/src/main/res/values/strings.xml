@@ -100,7 +100,7 @@
     <string name="error_confirmation_password">Sartutako pasahitza ez da aurrekoaren berdina</string>
     <string name="password">Pasahitza:</string>
     <string name="connection_error">Errorea konexioan</string>
-    <string name="error_email_taken">Email-a aurretik erabili da</string>
+    <string name="error_email_taken">Email-a edo erabiltzaile izena aurretik erabili da</string>
     <string name="error_username_taken">Erabiltzailea hartuta dago</string>
     <string name="username">Erabiltzailea:</string>
     <string name="error_invalid_credentials">Pasahitza edo erabiltzailea gaizki</string>
@@ -184,5 +184,7 @@
     <string name="ranking_description">Ikusi zein den zure posizioa ranking-ean</string>
     <string name="program_description">While-programak exekutatzeko ingurunea</string>
     <string name="quizzes_description">Galdetegiak bete puntuak lortzeko</string>
+    <string name="confirmAccount">Kontua baieztatu</string>
+    <string name="confirmationMessageSent">Kontua baieztatzeko mezua zure email helbidera bidali da</string>
 
 </resources>

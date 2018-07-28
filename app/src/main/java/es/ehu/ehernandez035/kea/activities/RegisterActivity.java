@@ -3,12 +3,14 @@ package es.ehu.ehernandez035.kea.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.TextUtils;
@@ -256,10 +258,29 @@ public class RegisterActivity extends AppCompatActivity {
             email.setError(null);
             username.setError(null);
             if (status == 0) {
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(RegisterActivity.this);
+                alert.setTitle(R.string.confirmAccount);
+                alert.setMessage(R.string.confirmationMessageSent);
+                alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+                }).show();
+
             } else {
                 switch (status) {
                     case 1:
@@ -278,11 +299,6 @@ public class RegisterActivity extends AppCompatActivity {
                         email.setError(getString(R.string.error_email_taken));
                         email.requestFocus();
                         break;
-                    case 4:
-                        username.setError(getString(R.string.error_username_taken));
-                        username.requestFocus();
-                        break;
-
 
                 }
             }
